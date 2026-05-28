@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
+import ScrollToTop from '../common/ScrollToTop';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'motion/react';
 import { ToastContainer } from 'react-toastify';
@@ -110,6 +111,7 @@ function UserAvatarDropdown() {
 export default function DashboardLayout() {
   const [sidebarOpen,      setSidebarOpen]      = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const mainRef = useRef(null);
 
   return (
     <div className="flex h-screen bg-gray-50/50 overflow-hidden">
@@ -138,7 +140,8 @@ export default function DashboardLayout() {
           <UserAvatarDropdown />
         </header>
 
-        <main className="flex-1 overflow-y-auto">
+        <main ref={mainRef} className="flex-1 overflow-y-auto">
+          <ScrollToTop containerRef={mainRef} />
           <Outlet />
         </main>
       </div>

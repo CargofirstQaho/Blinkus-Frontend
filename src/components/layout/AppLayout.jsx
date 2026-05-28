@@ -4,7 +4,8 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Lenis from 'lenis';
 import Navbar from './Navbar';
-import Footer from '../sections/Footer';
+import Footer from '../footer/Footer';
+import ScrollToTop from '../common/ScrollToTop';
 
 export default function AppLayout() {
   useEffect(() => {
@@ -28,6 +29,7 @@ export default function AppLayout() {
 
   return (
     <div className="flex flex-col min-h-screen">
+      <ScrollToTop />
       <Navbar />
       <main className="flex-1">
         <Outlet />

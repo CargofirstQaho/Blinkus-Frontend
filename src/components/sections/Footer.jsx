@@ -1,6 +1,10 @@
 import { Globe, Linkedin, Twitter, Github, ArrowUp } from 'lucide-react';
 import {Link} from "react-router-dom"
-import logoImg from "../../assets/logo2.png"
+// import logoImg from "../../assets/logo2.png"
+// import logoImg from '../../assets/BlinkusLogo.jpeg';
+import logoImg from '../../assets/logoBG.png';
+
+
 
 export default function Footer() {
   const scrollToTop = () => {

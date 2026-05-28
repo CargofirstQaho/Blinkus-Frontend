@@ -17,24 +17,21 @@ export default function CTA() {
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1 }}
         >
-          <div className="w-16 h-16 bg-accent rounded-3xl flex items-center justify-center mx-auto mb-10 shadow-2xl shadow-accent/40 rotate-12">
-            <Globe size={32} />
-          </div>
           <h2 className="text-4xl md:text-7xl font-display font-bold mb-8 leading-tight">
             Ready to scale your <br />{' '}
-            <span className="text-accent italic">global footprint?</span>
+            <span className="text-accent ">global footprint?</span>
           </h2>
           <p className="text-xl text-white/60 mb-12 max-w-xl mx-auto">
             Join 1,200+ global trading firms using Blinkus to automate their intelligence and risk
             operations.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link to="/signup" className="btn-primary py-5 px-10 text-lg w-full sm:w-auto text-center">
+            <Link to="/signup" className="btn-primary py-3 px-5 text-lg w-full sm:w-auto text-center">
               Request Pilot Access
             </Link>
             <Link
               to="/contact"
-              className="px-10 py-5 rounded-full border border-white/20 font-bold hover:bg-white/5 transition-colors w-full sm:w-auto flex items-center justify-center gap-2"
+              className="px-10 py-5 rounded-full border border-white/20 font-bold  transition-colors w-full sm:w-auto flex items-center justify-center gap-2"
             >
               Talk to Sales <ArrowRight size={20} />
             </Link>

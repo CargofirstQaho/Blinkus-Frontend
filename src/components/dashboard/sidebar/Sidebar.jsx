@@ -9,7 +9,10 @@ import ChatNav       from './ChatNav';
 import SettingsNav   from './SettingsNav';
 import UserNav       from './UserNav';
 import { cn } from '../../../lib/utils';
-import logoImg from '../../../assets/logo2.png';
+// import logoImg from '../../../assets/logo2.png';
+// import logoImg from '../../../assets/BlinkusLogo.jpeg';
+import logoImg from '../../../assets/logoBG.png';
+
 
 function SidebarInner({ isCollapsed, isMobile, onToggleCollapse, onClose }) {
   const dispatch = useDispatch();
@@ -32,8 +35,20 @@ function SidebarInner({ isCollapsed, isMobile, onToggleCollapse, onClose }) {
             !showText && 'justify-center'
           )}
         >
-          {showText && <img src={logoImg} alt="Blinkus" className="h-7 flex-1 object-contain object-left" />}
+          {/* {showText && <img src={logoImg} alt="Blinkus" className="cursor-pointer h-10 flex-1 object-contain object-left" />}
+           */}
 
+{showText && (
+  <img
+    src={logoImg}
+    alt="Blinkus"
+    onClick={() => {
+      navigate('/');
+      onClose?.(); 
+    }}
+    className="cursor-pointer h-10 flex-1 object-contain object-left"
+  />
+)}
           {isMobile ? (
             <button
               type="button"
