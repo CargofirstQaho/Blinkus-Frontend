@@ -32,7 +32,7 @@ export default function Settings() {
   const [toggles, setToggles] = useState({
     emailAlerts: true, pushAlerts: false, weeklyDigest: true, twoFactor: false, sessionLogs: true,
   });
-  const [model, setModel] = useState('gemini-3.5-flash');
+  const [model, setModel] = useState('BLINKUS TRADE AGENT 1.0');
 
   const toggle = (key) => {
     setToggles((p) => ({ ...p, [key]: !p[key] }));
