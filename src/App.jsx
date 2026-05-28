@@ -117,6 +117,7 @@ import {
 
 import { router } from './routes/router';
 import Spinner from './components/ui/Spinner';
+import VersionChecker from './components/common/VersionChecker';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -241,7 +242,12 @@ function AppCore() {
 
   if (!initialized) return <Spinner fullScreen />;
 
-  return <RouterProvider router={router} />;
+  return (
+    <>
+      <RouterProvider router={router} />
+      <VersionChecker />
+    </>
+  );
 }
 
 export default function App() {
