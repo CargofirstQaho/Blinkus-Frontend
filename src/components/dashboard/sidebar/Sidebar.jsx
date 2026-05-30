@@ -4,10 +4,11 @@ import { motion, AnimatePresence } from 'motion/react';
 import { X, Plus, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { clearChat } from '../../../redux/slices/chatSlice';
 import { SidebarCtx } from './SidebarContext';
-import DashboardNav  from './DashboardNav';
-import ChatNav       from './ChatNav';
-import SettingsNav   from './SettingsNav';
-import UserNav       from './UserNav';
+import DashboardNav    from './DashboardNav';
+import CredibilityNav  from './CredibilityNav';
+import ChatNav         from './ChatNav';
+import SettingsNav     from './SettingsNav';
+import UserNav         from './UserNav';
 import { cn } from '../../../lib/utils';
 // import logoImg from '../../../assets/logo2.png';
 // import logoImg from '../../../assets/BlinkusLogo.jpeg';
@@ -35,8 +36,6 @@ function SidebarInner({ isCollapsed, isMobile, onToggleCollapse, onClose }) {
             !showText && 'justify-center'
           )}
         >
-          {/* {showText && <img src={logoImg} alt="Blinkus" className="cursor-pointer h-10 flex-1 object-contain object-left" />}
-           */}
 
 {showText && (
   <img
@@ -90,6 +89,7 @@ function SidebarInner({ isCollapsed, isMobile, onToggleCollapse, onClose }) {
         <nav className="flex-1 px-2 overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-black/10">
           <DashboardNav />
           <ChatNav />
+          <CredibilityNav />
         </nav>
 
         <UserNav />

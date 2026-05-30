@@ -5,9 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import { cn } from '@/src/lib/utils.js';
-// import logoImg from '../../assets/logo2.png';
-// import logoImg from '../../assets/BlinkusLogo.jpeg';
-import logoImg from '../../assets/logoBG.png';
+import BrandLogo from '../common/BrandLogo';
 import { clearUser, selectIsAuthenticated } from '../../redux/slices/authSlice';
 import { clearChat } from '../../redux/slices/chatSlice';
 
@@ -64,8 +62,8 @@ export default function Navbar() {
       )}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2">
-          <img src={logoImg} alt="Blinkus" className="h-15" />
+        <Link to="/">
+          <BrandLogo logoHeight="h-15" textSize="text-xl" />
         </Link>
 
         <div className="hidden md:flex items-center gap-8">

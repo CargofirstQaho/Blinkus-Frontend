@@ -30,6 +30,7 @@ const Dashboard      = lazy(() => import('../pages/Dashboard'));
 const Chat           = lazy(() => import('../pages/Chat'));
 const Profile        = lazy(() => import('../pages/Profile'));
 const Settings       = lazy(() => import('../pages/Settings'));
+const Credibility    = lazy(() => import('../pages/Credibility'));
 
 export const router = createBrowserRouter([
   {
@@ -62,10 +63,11 @@ export const router = createBrowserRouter([
       {
         element: <DashboardLayout />,
         children: [
-          { path: 'dashboard',    element: wrap(Dashboard) },
-          { path: 'chat/:chatId', element: wrap(Chat)      },
-          { path: 'profile',      element: wrap(Profile)   },
-          { path: 'settings',     element: wrap(Settings)  },
+          { path: 'dashboard',              element: wrap(Dashboard)    },
+          { path: 'dashboard/credibility', element: wrap(Credibility)  },
+          { path: 'chat/:chatId',          element: wrap(Chat)         },
+          { path: 'profile',               element: wrap(Profile)      },
+          { path: 'settings',              element: wrap(Settings)     },
         ],
       },
     ],

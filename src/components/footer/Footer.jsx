@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ArrowUp } from 'lucide-react';
-import logoImg from '../../assets/logoBG.png';
+import BrandLogo from '../common/BrandLogo';
 import SocialLinks from './social/SocialLinks';
 import CompanySection from './company/CompanySection';
 import ResourcesSection from './resources/ResourcesSection';
@@ -26,9 +26,9 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-12 mb-20">
           <div className="col-span-2">
-            <div className="flex items-center gap-2 mb-6">
+            <div className="mb-6">
               <Link to="/">
-                <img src={logoImg} alt="Blinkus AI" className="h-20" />
+                <BrandLogo logoHeight="h-20" textSize="text-2xl" />
               </Link>
             </div>
             <p className="text-black/60 max-w-sm mb-8 leading-relaxed text-sm">
