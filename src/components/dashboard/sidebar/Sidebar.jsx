@@ -4,9 +4,10 @@ import { motion, AnimatePresence } from 'motion/react';
 import { X, Plus, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { clearChat } from '../../../redux/slices/chatSlice';
 import { SidebarCtx } from './SidebarContext';
-import DashboardNav    from './DashboardNav';
-import CredibilityNav  from './CredibilityNav';
-import ChatNav         from './ChatNav';
+import DashboardNav        from './DashboardNav';
+import CredibilityNav      from './CredibilityNav';
+import ContractDraftingNav from './ContractDraftingNav';
+import ChatNav             from './ChatNav';
 import SettingsNav     from './SettingsNav';
 import UserNav         from './UserNav';
 import { cn } from '../../../lib/utils';
@@ -90,6 +91,7 @@ function SidebarInner({ isCollapsed, isMobile, onToggleCollapse, onClose }) {
           <DashboardNav />
           <ChatNav />
           <CredibilityNav />
+          <ContractDraftingNav />
         </nav>
 
         <UserNav />
