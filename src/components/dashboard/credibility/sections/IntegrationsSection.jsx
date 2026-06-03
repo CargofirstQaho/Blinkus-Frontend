@@ -6,26 +6,26 @@ const INTEGRATIONS = [
     description: 'Export Credit Guarantee Corporation of India — sovereign-backed credit risk cover and buyer credit ratings for Indian exporters.',
     category:    'Credit Insurance',
   },
-  {
-    name:        'COFACE',
-    description: 'Global trade credit insurance and risk management covering 200+ countries with real-time business intelligence.',
-    category:    'Trade Credit',
-  },
-  {
-    name:        'Dun & Bradstreet',
-    description: 'Business credit reporting and commercial data analytics across 300M+ global business entities with D-U-N-S verification.',
-    category:    'Business Intelligence',
-  },
-  {
-    name:        'CreditSafe',
-    description: 'Real-time business credit scores, financial health reports, and payment behavior data for companies worldwide.',
-    category:    'Credit Scoring',
-  },
-  {
-    name:        'EXIM Intelligence',
-    description: 'Export-import trade data analytics and buyer intelligence derived from global customs and shipment datasets.',
-    category:    'Trade Analytics',
-  },
+  // {
+  //   name:        'COFACE',
+  //   description: 'Global trade credit insurance and risk management covering 200+ countries with real-time business intelligence.',
+  //   category:    'Trade Credit',
+  // },
+  // {
+  //   name:        'Dun & Bradstreet',
+  //   description: 'Business credit reporting and commercial data analytics across 300M+ global business entities with D-U-N-S verification.',
+  //   category:    'Business Intelligence',
+  // },
+  // {
+  //   name:        'CreditSafe',
+  //   description: 'Real-time business credit scores, financial health reports, and payment behavior data for companies worldwide.',
+  //   category:    'Credit Scoring',
+  // },
+  // {
+  //   name:        'EXIM Intelligence',
+  //   description: 'Export-import trade data analytics and buyer intelligence derived from global customs and shipment datasets.',
+  //   category:    'Trade Analytics',
+  // },
 ];
 
 export default function IntegrationsSection() {

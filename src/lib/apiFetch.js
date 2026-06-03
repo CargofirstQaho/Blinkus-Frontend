@@ -4,7 +4,6 @@ import { toast } from 'react-toastify';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-// Deduplicates concurrent refresh calls — all callers get the same promise
 let _inflightRefresh = null;
 
 async function doRefresh() {
@@ -30,12 +29,6 @@ export class SessionExpiredError extends Error {
   }
 }
 
-/**
- * Drop-in replacement for fetch() in authenticated contexts.
- * Automatically adds Authorization header from localStorage.
- * On 401: silently tries to refresh the token and retries once.
- * If refresh fails: dispatches clearUser, shows one toast, throws SessionExpiredError.
- */
 export async function apiFetch(url, options = {}) {
   const buildOpts = (token) => ({
     ...options,
@@ -51,7 +44,6 @@ export async function apiFetch(url, options = {}) {
 
   if (res.status !== 401) return res;
 
-  // Access token expired — try silent refresh
   const newToken = await doRefresh();
   if (!newToken) {
     localStorage.removeItem('blinkus_token');

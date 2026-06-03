@@ -9,14 +9,13 @@ const authSlice = createSlice({
     authLoading:     false,
     initialized:     false,
 
-    // ── Subscription & plan (hydrated from user object + usage response) ──────
     plan:               'free',
     isPremium:          false,
     permissions:        [],
     subscriptionEndsAt: null,
     usage: {
       aiQuestionsToday: 0,
-      aiQuestionsLimit: 20, // free plan default; null = unlimited (paid plan)
+      aiQuestionsLimit: 20,
     },
   },
   reducers: {
@@ -25,7 +24,6 @@ const authSlice = createSlice({
       state.token           = payload.token;
       state.isAuthenticated = true;
 
-      // Hydrate subscription fields from user object
       if (payload.user) {
         state.plan               = payload.user.plan               ?? 'free';
         state.isPremium          = payload.user.isPremium          ?? false;
@@ -33,7 +31,6 @@ const authSlice = createSlice({
         state.subscriptionEndsAt = payload.user.subscriptionEndsAt ?? null;
       }
 
-      // Hydrate usage if provided (included in getMe and login responses)
       if (payload.usage) {
         state.usage = payload.usage;
       }
@@ -58,12 +55,10 @@ const authSlice = createSlice({
       state.initialized = true;
     },
 
-    // Update usage counters — call after a successful AI message send
     setUsage(state, { payload }) {
       state.usage = payload;
     },
 
-    // Optimistically increment the daily AI usage counter on the frontend
     incrementAiUsage(state) {
       state.usage = {
         ...state.usage,

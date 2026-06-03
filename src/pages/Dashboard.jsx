@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { MessageSquare, Zap, ArrowRight, BarChart3, Shield, Plus, Clock } from 'lucide-react';
@@ -7,6 +7,9 @@ import { setConversations, selectConversations } from '../redux/slices/chatSlice
 import { apiFetch, SessionExpiredError } from '../lib/apiFetch';
 import HeroBanner from '../components/dashboard/banner/HeroBanner';
 import Spinner from '../components/ui/Spinner';
+import FutureBanner from '../components/dashboard/comingSoon/FutureBanner';
+import ComingSoonSection from '../components/dashboard/comingSoon/ComingSoonSection';
+import RoadmapTimeline from '../components/dashboard/comingSoon/RoadmapTimeline';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -22,6 +25,7 @@ export default function Dashboard() {
   const navigate      = useNavigate();
   const conversations = useSelector(selectConversations);
   const [loading, setLoading] = useState(false);
+  const roadmapRef = useRef(null);
 
   useEffect(() => {
     const loadConversations = async () => {

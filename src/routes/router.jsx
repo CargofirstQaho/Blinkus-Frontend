@@ -32,6 +32,7 @@ const Profile        = lazy(() => import('../pages/Profile'));
 const Settings       = lazy(() => import('../pages/Settings'));
 const Credibility       = lazy(() => import('../pages/Credibility'));
 const ContractDrafting  = lazy(() => import('../pages/ContractDrafting'));
+const ComingSoon        = lazy(() => import('../pages/ComingSoon'));
 
 export const router = createBrowserRouter([
   {
@@ -65,6 +66,7 @@ export const router = createBrowserRouter([
         element: <DashboardLayout />,
         children: [
           { path: 'dashboard',              element: wrap(Dashboard)    },
+          { path: 'dashboard/coming-soon',       element: wrap(ComingSoon)       },
           { path: 'dashboard/credibility',       element: wrap(Credibility)      },
           { path: 'dashboard/contract-drafting', element: wrap(ContractDrafting) },
           { path: 'chat/:chatId',          element: wrap(Chat)         },

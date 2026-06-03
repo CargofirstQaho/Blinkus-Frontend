@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'motion/react';
-import { User, Mail, Phone, Building, Save, Camera } from 'lucide-react';
+import { User, Mail, Phone, Building, Save, Camera, Lock, CheckCircle2, Shield } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { selectUser, setUser } from '../redux/slices/authSlice';
 import { apiFetch, SessionExpiredError } from '../lib/apiFetch';
@@ -61,65 +61,263 @@ export default function Profile() {
     { name: 'company', label: 'Company',       icon: Building, type: 'text',  readOnly: false },
   ];
 
-  return (
-    <div className="p-6 md:p-8 max-w-2xl mx-auto">
-      <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-display font-bold mb-1">Profile</h1>
-        <p className="text-black/50 text-sm mb-8">Manage your personal information</p>
+  const initials = (user?.name || 'U')
+    .split(' ')
+    .filter(Boolean)
+    .map((w) => w[0].toUpperCase())
+    .slice(0, 2)
+    .join('');
 
-        <div className="bg-white rounded-2xl border border-black/5 p-6 mb-6">
-          <div className="flex items-center gap-5 mb-8">
-            <div className="relative">
-              <div className="w-20 h-20 rounded-2xl bg-accent flex items-center justify-center text-white text-3xl font-bold">
-                {user?.name?.[0]?.toUpperCase() || 'U'}
+  return (
+    <div className="p-4 sm:p-6 md:p-8 max-w-5xl mx-auto">
+      <motion.div
+        initial={{ opacity: 0, y: 16 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+      >
+        <div className="mb-7">
+          <h1 className="text-2xl font-display font-bold" style={{ color: '#0f172a' }}>
+            Profile
+          </h1>
+          <p className="text-sm mt-0.5" style={{ color: '#64748b' }}>
+            Manage your personal information and account details
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-6">
+
+          <div className="lg:col-span-1">
+            <div
+              className="bg-white rounded-2xl overflow-hidden"
+              style={{ border: '1px solid rgba(37,99,235,0.1)', boxShadow: '0 1px 12px rgba(37,99,235,0.06)' }}
+            >
+              <div
+                className="relative h-24 overflow-hidden"
+                style={{ background: 'linear-gradient(135deg, #f0f6ff 0%, #e8f0fe 55%, #eff6ff 100%)' }}
+              >
+                <div
+                  className="absolute inset-0 pointer-events-none"
+                  style={{
+                    backgroundImage:
+                      'linear-gradient(rgba(37,99,235,0.07) 1px, transparent 1px), linear-gradient(90deg, rgba(37,99,235,0.07) 1px, transparent 1px)',
+                    backgroundSize: '28px 28px',
+                  }}
+                />
+                <div
+                  className="absolute -top-10 -right-10 w-40 h-40 rounded-full pointer-events-none"
+                  style={{ background: 'radial-gradient(circle, rgba(37,99,235,0.12) 0%, transparent 70%)' }}
+                />
               </div>
-              <button className="absolute -bottom-1 -right-1 w-7 h-7 bg-white border border-black/10 rounded-lg flex items-center justify-center shadow-sm hover:border-accent/30 transition-colors">
-                <Camera size={13} />
-              </button>
-            </div>
-            <div>
-              <div className="font-bold text-lg">{user?.name || 'Your Name'}</div>
-              <div className="text-sm text-black/40">{user?.email}</div>
-              <div className="mt-2 inline-flex items-center gap-1.5 text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Active Account
+
+              <div className="flex justify-center -mt-10 relative z-10 px-5">
+                <div className="relative">
+                  <div
+                    className="w-20 h-20 rounded-2xl flex items-center justify-center text-white text-2xl font-bold"
+                    style={{
+                      background: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 100%)',
+                      boxShadow: '0 6px 20px rgba(37,99,235,0.28)',
+                    }}
+                  >
+                    {initials}
+                  </div>
+                  <button
+                    type="button"
+                    aria-label="Change profile photo"
+                    className="absolute -bottom-1.5 -right-1.5 w-7 h-7 bg-white rounded-lg flex items-center justify-center transition-colors hover:bg-blue-50"
+                    style={{ border: '1px solid rgba(37,99,235,0.15)', boxShadow: '0 1px 4px rgba(0,0,0,0.08)' }}
+                  >
+                    <Camera size={13} style={{ color: '#3b82f6' }} />
+                  </button>
+                </div>
+              </div>
+
+              <div className="px-5 pt-3 pb-5">
+                <div className="text-center mb-4">
+                  <h2 className="font-bold text-base leading-snug" style={{ color: '#0f172a' }}>
+                    {user?.name || 'Your Name'}
+                  </h2>
+                  <p className="text-xs mt-0.5 truncate" style={{ color: '#94a3b8' }}>
+                    {user?.email}
+                  </p>
+                  <div
+                    className="mt-2.5 inline-flex items-center gap-1.5 text-[11px] font-bold px-2.5 py-1 rounded-full"
+                    style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', color: '#16a34a' }}
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    Active Account
+                  </div>
+                </div>
+
+                <div className="space-y-1.5 pt-3.5" style={{ borderTop: '1px solid rgba(37,99,235,0.08)' }}>
+                  {[
+                    { icon: Mail,     label: 'Email',   value: user?.email   || '—'        },
+                    { icon: Phone,    label: 'Mobile',  value: user?.mobile  || 'Not set'  },
+                    { icon: Building, label: 'Company', value: user?.company || 'Not set'  },
+                  ].map(({ icon: Icon, label, value }) => (
+                    <div key={label} className="flex items-center gap-2.5 py-1.5">
+                      <div
+                        className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0"
+                        style={{ background: 'rgba(37,99,235,0.07)', border: '1px solid rgba(37,99,235,0.12)' }}
+                      >
+                        <Icon size={13} style={{ color: '#3b82f6' }} />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p
+                          className="text-[9px] font-bold uppercase tracking-widest"
+                          style={{ color: '#94a3b8' }}
+                        >
+                          {label}
+                        </p>
+                        <p className="text-xs font-medium truncate mt-0.5" style={{ color: '#334155' }}>
+                          {value}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div
+                  className="mt-4 p-3 rounded-xl flex items-center gap-2.5"
+                  style={{ background: 'rgba(37,99,235,0.05)', border: '1px solid rgba(37,99,235,0.1)' }}
+                >
+                  <Shield size={13} style={{ color: '#2563eb' }} className="shrink-0" />
+                  <p className="text-[11px] font-medium leading-snug" style={{ color: '#1e40af' }}>
+                    Your data is secure and encrypted
+                  </p>
+                </div>
               </div>
             </div>
           </div>
 
-          <form onSubmit={handleSave} className="space-y-4">
-            {fields.map(({ name, label, icon: Icon, type, readOnly }) => (
-              <div key={name}>
-                <label className="block text-sm font-semibold mb-1.5">{label}</label>
-                <div className="relative">
-                  <Icon size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-black/30" />
-                  <input
-                    type={type}
-                    name={name}
-                    value={form[name]}
-                    onChange={readOnly ? undefined : handleChange}
-                    readOnly={readOnly}
-                    disabled={saving}
-                    className={cn(
-                      'w-full pl-10 pr-4 py-2.5 rounded-xl border border-black/10 outline-none transition-all text-sm',
-                      readOnly
-                        ? 'bg-black/3 text-black/40 cursor-not-allowed'
-                        : 'bg-black/3 focus:border-accent focus:ring-2 focus:ring-accent/20 disabled:opacity-60'
-                    )}
-                  />
+          <div className="lg:col-span-2">
+            <div
+              className="bg-white rounded-2xl overflow-hidden"
+              style={{ border: '1px solid rgba(37,99,235,0.1)', boxShadow: '0 1px 12px rgba(37,99,235,0.06)' }}
+            >
+              <div
+                className="px-6 py-4 flex items-center justify-between"
+                style={{ borderBottom: '1px solid rgba(37,99,235,0.08)' }}
+              >
+                <div>
+                  <h2 className="font-bold text-sm" style={{ color: '#0f172a' }}>
+                    Edit Profile
+                  </h2>
+                  <p className="text-[11px] mt-0.5" style={{ color: '#94a3b8' }}>
+                    Update your personal details below
+                  </p>
+                </div>
+                <div
+                  className="flex items-center gap-1.5 text-[10px] font-bold px-2.5 py-1 rounded-full"
+                  style={{ background: 'rgba(37,99,235,0.07)', border: '1px solid rgba(37,99,235,0.15)', color: '#2563eb' }}
+                >
+                  <CheckCircle2 size={11} />
+                  Verified
                 </div>
               </div>
-            ))}
-            <button
-              type="submit"
-              disabled={saving}
-              className="btn-primary flex items-center gap-2 py-2.5 disabled:opacity-60 disabled:cursor-not-allowed"
-            >
-              {saving
-                ? <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                : <><Save size={16} /> Save Changes</>
-              }
-            </button>
-          </form>
+
+              <form onSubmit={handleSave} className="p-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                  {fields.map(({ name, label, icon: Icon, type, readOnly }) => (
+                    <div key={name} className="flex flex-col gap-1.5">
+                      <div className="flex items-center justify-between">
+                        <label
+                          htmlFor={`field-${name}`}
+                          className="text-xs font-semibold"
+                          style={{ color: '#475569' }}
+                        >
+                          {label}
+                        </label>
+                        {readOnly && (
+                          <span
+                            className="flex items-center gap-1 text-[10px] font-medium"
+                            style={{ color: '#94a3b8' }}
+                          >
+                            <Lock size={9} />
+                            Read-only
+                          </span>
+                        )}
+                      </div>
+                      <div className="relative">
+                        <Icon
+                          size={14}
+                          className="absolute left-3.5 top-1/2 -translate-y-1/2 shrink-0 pointer-events-none"
+                          style={{ color: readOnly ? '#cbd5e1' : '#3b82f6' }}
+                        />
+                        <input
+                          id={`field-${name}`}
+                          type={type}
+                          name={name}
+                          value={form[name]}
+                          onChange={readOnly ? undefined : handleChange}
+                          readOnly={readOnly}
+                          disabled={saving}
+                          placeholder={readOnly ? undefined : `Enter your ${label.toLowerCase()}`}
+                          className={cn(
+                            'w-full pl-10 pr-4 py-2.5 rounded-xl text-sm outline-none transition-all',
+                            readOnly
+                              ? 'cursor-not-allowed'
+                              : 'disabled:opacity-60'
+                          )}
+                          style={
+                            readOnly
+                              ? {
+                                  background: '#f8fafc',
+                                  border: '1px solid #e2e8f0',
+                                  color: '#94a3b8',
+                                }
+                              : {
+                                  background: '#ffffff',
+                                  border: '1px solid #e2e8f0',
+                                  color: '#0f172a',
+                                }
+                          }
+                          onFocus={readOnly ? undefined : (e) => {
+                            e.target.style.borderColor = '#3b82f6';
+                            e.target.style.boxShadow = '0 0 0 3px rgba(59,130,246,0.12)';
+                          }}
+                          onBlur={readOnly ? undefined : (e) => {
+                            e.target.style.borderColor = '#e2e8f0';
+                            e.target.style.boxShadow = 'none';
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div
+                  className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-5"
+                  style={{ borderTop: '1px solid rgba(37,99,235,0.08)' }}
+                >
+                  <p className="text-xs" style={{ color: '#94a3b8' }}>
+                    Email address cannot be changed for security reasons.
+                  </p>
+                  <button
+                    type="submit"
+                    disabled={saving}
+                    className="flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white rounded-xl transition-all disabled:opacity-60 disabled:cursor-not-allowed hover:opacity-90 active:scale-95 whitespace-nowrap shrink-0"
+                    style={{
+                      background: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 100%)',
+                      boxShadow: saving ? 'none' : '0 4px 14px rgba(37,99,235,0.28)',
+                    }}
+                  >
+                    {saving ? (
+                      <>
+                        <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        Saving...
+                      </>
+                    ) : (
+                      <>
+                        <Save size={15} />
+                        Save Changes
+                      </>
+                    )}
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
         </div>
       </motion.div>
     </div>

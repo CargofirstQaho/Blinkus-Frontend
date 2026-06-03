@@ -4,10 +4,9 @@ import { motion, AnimatePresence } from 'motion/react';
 import { X, Plus, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { clearChat } from '../../../redux/slices/chatSlice';
 import { SidebarCtx } from './SidebarContext';
-import DashboardNav        from './DashboardNav';
-import CredibilityNav      from './CredibilityNav';
-import ContractDraftingNav from './ContractDraftingNav';
-import ChatNav             from './ChatNav';
+import DashboardNav           from './DashboardNav';
+import ChatNav                from './ChatNav';
+import ComingSoonSidebarGroup from './ComingSoonSidebarGroup';
 import SettingsNav     from './SettingsNav';
 import UserNav         from './UserNav';
 import { cn } from '../../../lib/utils';
@@ -90,8 +89,7 @@ function SidebarInner({ isCollapsed, isMobile, onToggleCollapse, onClose }) {
         <nav className="flex-1 px-2 overflow-y-auto overflow-x-hidden [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-black/10">
           <DashboardNav />
           <ChatNav />
-          <CredibilityNav />
-          <ContractDraftingNav />
+          <ComingSoonSidebarGroup />
         </nav>
 
         <UserNav />

@@ -16,7 +16,7 @@ export default function CredibilityHero() {
         <div className="flex items-center gap-2 mb-4">
           <span className="inline-flex items-center gap-1.5 px-3 py-1 bg-accent/10 text-accent text-[10px] font-bold rounded-full uppercase tracking-widest">
             <ShieldCheck size={11} />
-            Credibility Intelligence Platform
+            Coming soon
           </span>
         </div>
 

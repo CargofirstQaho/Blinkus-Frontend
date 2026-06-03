@@ -11,7 +11,6 @@ import FeatureSection from '../common/FeatureSection.jsx';
 export default function LegalAndPerformance() {
   return (
     <div className="space-y-0">
-      {/* Legal Intelligence */}
       <FeatureSection
         tagline="Legal Intelligence"
         title="AI-Powered Trade Legal Hub."
@@ -66,7 +65,6 @@ export default function LegalAndPerformance() {
         </div>
       </FeatureSection>
 
-      {/* Performance Dashboard */}
       <FeatureSection
         tagline="Trade Lifecycle"
         reversed

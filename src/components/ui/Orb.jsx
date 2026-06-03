@@ -11,7 +11,7 @@ export default function Orb({
 }) {
   const ctnDom = useRef(null);
 
-  const vert = /* glsl */ `
+  const vert = `
     precision highp float;
     attribute vec2 position;
     attribute vec2 uv;
@@ -22,7 +22,7 @@ export default function Orb({
     }
   `;
 
-  const frag = /* glsl */ `
+  const frag = `
     precision highp float;
 
     uniform float iTime;
@@ -297,7 +297,6 @@ export default function Orb({
   return <div ref={ctnDom} className="orb-container" />;
 }
 
-/* ── Helpers ── */
 function hslToRgb(h, s, l) {
   let r, g, b;
   if (s === 0) {
