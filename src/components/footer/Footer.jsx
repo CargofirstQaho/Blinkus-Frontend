@@ -56,7 +56,7 @@ export default function Footer() {
 
         <div className="pt-12 border-t border-black/5 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="text-sm text-black/40 font-medium">
-            © 2026 BLINKUS GLOBAL TRADE SOLUTIONS. ALL RIGHTS RESERVED.
+            © 2026 BLINKUS AI. ALL RIGHTS RESERVED.
           </div>
           <div className="flex flex-wrap justify-center gap-6 md:gap-8 text-xs font-bold text-black/40 uppercase tracking-widest">
             {LEGAL_LINKS.map(({ label, href }) =>
