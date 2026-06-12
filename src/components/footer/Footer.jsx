@@ -13,9 +13,8 @@ const PLATFORM_LINKS = [
 ];
 
 const LEGAL_LINKS = [
-  { label: 'Terms',   href: '#' },
-  { label: 'Privacy', href: '#' },
-  { label: 'Cookies', href: '#' },
+  { label: 'Terms',   href: '/terms-and-conditions' },
+  { label: 'Privacy', href: '/privacy-policy' },
 ];
 
 export default function Footer() {
@@ -38,7 +37,7 @@ export default function Footer() {
             <SocialLinks />
           </div>
 
-          <div>
+          {/* <div>
             <h4 className="font-bold text-sm uppercase tracking-widest mb-6">Platform</h4>
             <ul className="space-y-4 text-sm font-medium text-black/60">
               {PLATFORM_LINKS.map(({ label, href }) => (
@@ -49,7 +48,7 @@ export default function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </div> */}
 
           <CompanySection />
           <ResourcesSection />
@@ -60,14 +59,20 @@ export default function Footer() {
             © 2026 BLINKUS GLOBAL TRADE SOLUTIONS. ALL RIGHTS RESERVED.
           </div>
           <div className="flex flex-wrap justify-center gap-6 md:gap-8 text-xs font-bold text-black/40 uppercase tracking-widest">
-            {LEGAL_LINKS.map(({ label, href }) => (
-              <a key={label} href={href} className="hover:text-accent transition-colors duration-200">
-                {label}
-              </a>
-            ))}
+            {LEGAL_LINKS.map(({ label, href }) =>
+              href.startsWith('/') ? (
+                <Link key={label} to={href} className="hover:text-accent transition-colors duration-200">
+                  {label}
+                </Link>
+              ) : (
+                <a key={label} href={href} className="hover:text-accent transition-colors duration-200">
+                  {label}
+                </a>
+              )
+            )}
             <button
               onClick={scrollToTop}
-              className="flex items-center gap-1.5 hover:text-accent transition-colors duration-200"
+              className="flex items-center gap-1.5 hover:text-accent transition-colors duration-200 cursor-pointer"
             >
               BACK TO TOP <ArrowUp size={14} />
             </button>
