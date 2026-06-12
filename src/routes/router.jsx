@@ -35,30 +35,30 @@ const Settings       = lazy(() => import('../pages/Settings'));
 const Credibility       = lazy(() => import('../pages/Credibility'));
 const ContractDrafting  = lazy(() => import('../pages/ContractDrafting'));
 const ComingSoon        = lazy(() => import('../pages/ComingSoon'));
-const Upgrade           = lazy(() => import('../pages/Upgrade'));
-const AddOrganization   = lazy(() => import('../pages/erp/AddOrganization'));
-const Domestic          = lazy(() => import('../pages/erp/Domestic'));
-const International     = lazy(() => import('../pages/erp/International'));
-const TradeHistory      = lazy(() => import('../pages/erp/TradeHistory'));
+// const Upgrade           = lazy(() => import('../pages/Upgrade'));
+// const AddOrganization   = lazy(() => import('../pages/erp/AddOrganization'));
+// const Domestic          = lazy(() => import('../pages/erp/Domestic'));
+// const International     = lazy(() => import('../pages/erp/International'));
+// const TradeHistory      = lazy(() => import('../pages/erp/TradeHistory'));
 
-const PurchaseOrderPage        = lazy(() => import('../features/trade/purchase-order/pages/PurchaseOrderPage'));
-const PurchaseOrderReviewPage  = lazy(() => import('../features/trade/purchase-order/pages/PurchaseOrderReviewPage'));
-const CreditNotePage        = lazy(() => import('../features/trade/credit-note/pages/CreditNotePage'));
-const CreditNoteReviewPage  = lazy(() => import('../features/trade/credit-note/pages/CreditNoteReviewPage'));
-const DebitNotePage         = lazy(() => import('../features/trade/debit-note/pages/DebitNotePage'));
-const DebitNoteReviewPage   = lazy(() => import('../features/trade/debit-note/pages/DebitNoteReviewPage'));
-const EWayBillPage          = lazy(() => import('../modules/trade/pages/domestic/EWayBillPage'));
-const ContractDraftingPage       = lazy(() => import('../features/trade/international/contracts/pages/ContractEntryPage'));
-const ContractUploadPage         = lazy(() => import('../features/trade/international/contracts/pages/ContractUploadPage'));
-const ContractDraftFormPage      = lazy(() => import('../features/trade/international/contracts/pages/ContractDraftFormPage'));
-const ContractReviewPage         = lazy(() => import('../features/trade/international/contracts/pages/ContractReviewPage'));
-const ProformaInvoicePage       = lazy(() => import('../features/trade/proforma-invoice/pages/ProformaInvoicePage'));
-const ProformaInvoiceReviewPage = lazy(() => import('../features/trade/proforma-invoice/pages/ProformaInvoiceReviewPage'));
-const PackingListPage       = lazy(() => import('../features/trade/packing-list/pages/PackingListPage'));
-const PackingListReviewPage = lazy(() => import('../features/trade/packing-list/pages/PackingListReviewPage'));
-const CommercialInvoicePage       = lazy(() => import('../features/trade/commercial-invoice/pages/CommercialInvoicePage'));
-const CommercialInvoiceReviewPage = lazy(() => import('../features/trade/commercial-invoice/pages/CommercialInvoiceReviewPage'));
-const TradeHistoryPage      = lazy(() => import('../modules/trade/pages/history/TradeHistoryPage'));
+// const PurchaseOrderPage        = lazy(() => import('../features/trade/purchase-order/pages/PurchaseOrderPage'));
+// const PurchaseOrderReviewPage  = lazy(() => import('../features/trade/purchase-order/pages/PurchaseOrderReviewPage'));
+// const CreditNotePage        = lazy(() => import('../features/trade/credit-note/pages/CreditNotePage'));
+// const CreditNoteReviewPage  = lazy(() => import('../features/trade/credit-note/pages/CreditNoteReviewPage'));
+// const DebitNotePage         = lazy(() => import('../features/trade/debit-note/pages/DebitNotePage'));
+// const DebitNoteReviewPage   = lazy(() => import('../features/trade/debit-note/pages/DebitNoteReviewPage'));
+// const EWayBillPage          = lazy(() => import('../modules/trade/pages/domestic/EWayBillPage'));
+// const ContractDraftingPage       = lazy(() => import('../features/trade/international/contracts/pages/ContractEntryPage'));
+// const ContractUploadPage         = lazy(() => import('../features/trade/international/contracts/pages/ContractUploadPage'));
+// const ContractDraftFormPage      = lazy(() => import('../features/trade/international/contracts/pages/ContractDraftFormPage'));
+// const ContractReviewPage         = lazy(() => import('../features/trade/international/contracts/pages/ContractReviewPage'));
+// const ProformaInvoicePage       = lazy(() => import('../features/trade/proforma-invoice/pages/ProformaInvoicePage'));
+// const ProformaInvoiceReviewPage = lazy(() => import('../features/trade/proforma-invoice/pages/ProformaInvoiceReviewPage'));
+// const PackingListPage       = lazy(() => import('../features/trade/packing-list/pages/PackingListPage'));
+// const PackingListReviewPage = lazy(() => import('../features/trade/packing-list/pages/PackingListReviewPage'));
+// const CommercialInvoicePage       = lazy(() => import('../features/trade/commercial-invoice/pages/CommercialInvoicePage'));
+// const CommercialInvoiceReviewPage = lazy(() => import('../features/trade/commercial-invoice/pages/CommercialInvoiceReviewPage'));
+// const TradeHistoryPage      = lazy(() => import('../modules/trade/pages/history/TradeHistoryPage'));
 
 export const router = createBrowserRouter([
   {
@@ -100,30 +100,29 @@ export const router = createBrowserRouter([
           { path: 'chat/:chatId',          element: wrap(Chat)         },
           { path: 'profile',               element: wrap(Profile)      },
           { path: 'settings',              element: wrap(Settings)     },
-          { path: 'upgrade',               element: wrap(Upgrade)      },
-          { path: 'erp/add-organization',  element: wrap(AddOrganization) },
-          { path: 'erp/domestic',          element: wrap(Domestic)        },
-          { path: 'erp/international',     element: wrap(International)   },
-          { path: 'erp/trade-history',     element: wrap(TradeHistory)    },
-
-          { path: 'trade/domestic/purchase-order',        element: wrap(PurchaseOrderPage)        },
-          { path: 'trade/domestic/purchase-order/review', element: wrap(PurchaseOrderReviewPage)  },
-          { path: 'trade/domestic/credit-note',           element: wrap(CreditNotePage)        },
-          { path: 'trade/domestic/credit-note/review',   element: wrap(CreditNoteReviewPage)  },
-          { path: 'trade/domestic/debit-note',            element: wrap(DebitNotePage)         },
-          { path: 'trade/domestic/debit-note/review',    element: wrap(DebitNoteReviewPage)   },
-          { path: 'trade/domestic/e-way-bill',            element: wrap(EWayBillPage)          },
-          { path: 'trade/international/contract-drafting',        element: wrap(ContractDraftingPage)   },
-          { path: 'trade/international/contract-drafting/upload', element: wrap(ContractUploadPage)     },
-          { path: 'trade/international/contract-drafting/draft',  element: wrap(ContractDraftFormPage)  },
-          { path: 'trade/international/contract-drafting/review', element: wrap(ContractReviewPage)     },
-          { path: 'trade/international/proforma-invoice',         element: wrap(ProformaInvoicePage)       },
-          { path: 'trade/international/proforma-invoice/review',  element: wrap(ProformaInvoiceReviewPage) },
-          { path: 'trade/international/packing-list',         element: wrap(PackingListPage)       },
-          { path: 'trade/international/packing-list/review',  element: wrap(PackingListReviewPage) },
-          { path: 'trade/international/commercial-invoice',        element: wrap(CommercialInvoicePage)       },
-          { path: 'trade/international/commercial-invoice/review', element: wrap(CommercialInvoiceReviewPage) },
-          { path: 'trade/history',                        element: wrap(TradeHistoryPage)      },
+          // { path: 'upgrade',               element: wrap(Upgrade)      },
+          // { path: 'erp/add-organization',  element: wrap(AddOrganization) },
+          // { path: 'erp/domestic',          element: wrap(Domestic)        },
+          // { path: 'erp/international',     element: wrap(International)   },
+          // { path: 'erp/trade-history',     element: wrap(TradeHistory)    },
+          // { path: 'trade/domestic/purchase-order',        element: wrap(PurchaseOrderPage)        },
+          // { path: 'trade/domestic/purchase-order/review', element: wrap(PurchaseOrderReviewPage)  },
+          // { path: 'trade/domestic/credit-note',           element: wrap(CreditNotePage)        },
+          // { path: 'trade/domestic/credit-note/review',   element: wrap(CreditNoteReviewPage)  },
+          // { path: 'trade/domestic/debit-note',            element: wrap(DebitNotePage)         },
+          // { path: 'trade/domestic/debit-note/review',    element: wrap(DebitNoteReviewPage)   },
+          // { path: 'trade/domestic/e-way-bill',            element: wrap(EWayBillPage)          },
+          // { path: 'trade/international/contract-drafting',        element: wrap(ContractDraftingPage)   },
+          // { path: 'trade/international/contract-drafting/upload', element: wrap(ContractUploadPage)     },
+          // { path: 'trade/international/contract-drafting/draft',  element: wrap(ContractDraftFormPage)  },
+          // { path: 'trade/international/contract-drafting/review', element: wrap(ContractReviewPage)     },
+          // { path: 'trade/international/proforma-invoice',         element: wrap(ProformaInvoicePage)       },
+          // { path: 'trade/international/proforma-invoice/review',  element: wrap(ProformaInvoiceReviewPage) },
+          // { path: 'trade/international/packing-list',         element: wrap(PackingListPage)       },
+          // { path: 'trade/international/packing-list/review',  element: wrap(PackingListReviewPage) },
+          // { path: 'trade/international/commercial-invoice',        element: wrap(CommercialInvoicePage)       },
+          // { path: 'trade/international/commercial-invoice/review', element: wrap(CommercialInvoiceReviewPage) },
+          // { path: 'trade/history',                        element: wrap(TradeHistoryPage)      },
         ],
       },
     ],
