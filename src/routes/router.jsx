@@ -13,6 +13,7 @@ const wrap = (Component) => (
 );
 
 const Home           = lazy(() => import('../pages/Home'));
+const Pricing        = lazy(() => import('../pages/Pricing'));
 const Login          = lazy(() => import('../pages/Login'));
 const Signup         = lazy(() => import('../pages/Signup'));
 const VerifyOtp      = lazy(() => import('../pages/VerifyOtp'));
@@ -28,13 +29,14 @@ const Articles       = lazy(() => import('../pages/Articles'));
 const PressRelease   = lazy(() => import('../pages/PressRelease'));
 const PrivacyPolicy  = lazy(() => import('../pages/PrivacyPolicy'));
 const TermsConditions = lazy(() => import('../pages/TermsConditions'));
-const Dashboard      = lazy(() => import('../pages/Dashboard'));
-const Chat           = lazy(() => import('../pages/Chat'));
-const Profile        = lazy(() => import('../pages/Profile'));
-const Settings       = lazy(() => import('../pages/Settings'));
-const Credibility       = lazy(() => import('../pages/Credibility'));
-const ContractDrafting  = lazy(() => import('../pages/ContractDrafting'));
-const ComingSoon        = lazy(() => import('../pages/ComingSoon'));
+// const Consent        = lazy(() => import('../pages/Consent'));
+// const Dashboard      = lazy(() => import('../pages/Dashboard'));
+// const Chat           = lazy(() => import('../pages/Chat'));
+// const Profile        = lazy(() => import('../pages/Profile'));
+// const Settings       = lazy(() => import('../pages/Settings'));
+// const Credibility       = lazy(() => import('../pages/Credibility'));
+// const ContractDrafting  = lazy(() => import('../pages/ContractDrafting'));
+// const ComingSoon        = lazy(() => import('../pages/ComingSoon'));
 // const Upgrade           = lazy(() => import('../pages/Upgrade'));
 // const AddOrganization   = lazy(() => import('../pages/erp/AddOrganization'));
 // const Domestic          = lazy(() => import('../pages/erp/Domestic'));
@@ -65,6 +67,7 @@ export const router = createBrowserRouter([
     element: <AppLayout />,
     children: [
       { index: true,                   element: wrap(Home)           },
+      { path: 'pricing',               element: wrap(Pricing)        },
       { path: 'about',                 element: wrap(About)          },
       { path: 'contact',               element: wrap(Contact)        },
       { path: 'careers',               element: wrap(Careers)        },
@@ -73,6 +76,7 @@ export const router = createBrowserRouter([
       { path: 'press-release',         element: wrap(PressRelease)   },
       { path: 'privacy-policy',        element: wrap(PrivacyPolicy)  },
       { path: 'terms-and-conditions',  element: wrap(TermsConditions) },
+      { path: 'terms-of-service',      element: wrap(TermsConditions) },
       { path: 'auth/google/callback',  element: wrap(GoogleCallback) },
       {
         element: <GuestRoute />,
@@ -90,6 +94,7 @@ export const router = createBrowserRouter([
   {
     element: <ProtectedRoute />,
     children: [
+      // { path: 'consent', element: wrap(Consent) },
       {
         element: <DashboardLayout />,
         children: [
@@ -100,7 +105,7 @@ export const router = createBrowserRouter([
           { path: 'chat/:chatId',          element: wrap(Chat)         },
           { path: 'profile',               element: wrap(Profile)      },
           { path: 'settings',              element: wrap(Settings)     },
-          // { path: 'upgrade',               element: wrap(Upgrade)      },
+          { path: 'upgrade',               element: wrap(Upgrade)      },
           // { path: 'erp/add-organization',  element: wrap(AddOrganization) },
           // { path: 'erp/domestic',          element: wrap(Domestic)        },
           // { path: 'erp/international',     element: wrap(International)   },

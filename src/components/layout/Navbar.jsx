@@ -12,6 +12,7 @@ import { clearChat } from '../../redux/slices/chatSlice';
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 const NAV_LINKS = [
+  { name: 'Pricing', href: '/pricing' },
   { name: 'About',   href: '/about'   },
   { name: 'Contact', href: '/contact' },
 ];
