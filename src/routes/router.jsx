@@ -37,7 +37,7 @@ const Settings       = lazy(() => import('../pages/Settings'));
 const Credibility       = lazy(() => import('../pages/Credibility'));
 const ContractDrafting  = lazy(() => import('../pages/ContractDrafting'));
 const ComingSoon        = lazy(() => import('../pages/ComingSoon'));
-const Upgrade           = lazy(() => import('../pages/Upgrade'));
+// const Upgrade           = lazy(() => import('../pages/Upgrade'));
 // const AddOrganization   = lazy(() => import('../pages/erp/AddOrganization'));
 // const Domestic          = lazy(() => import('../pages/erp/Domestic'));
 // const International     = lazy(() => import('../pages/erp/International'));
@@ -105,7 +105,7 @@ export const router = createBrowserRouter([
           { path: 'chat/:chatId',          element: wrap(Chat)         },
           { path: 'profile',               element: wrap(Profile)      },
           { path: 'settings',              element: wrap(Settings)     },
-          { path: 'upgrade',               element: wrap(Upgrade)      },
+          // { path: 'upgrade',               element: wrap(Upgrade)      },
           // { path: 'erp/add-organization',  element: wrap(AddOrganization) },
           // { path: 'erp/domestic',          element: wrap(Domestic)        },
           // { path: 'erp/international',     element: wrap(International)   },
