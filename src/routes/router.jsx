@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router-dom';
+import { createBrowserRouter,Navigate  } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 import AppLayout from '../components/layout/AppLayout';
 import DashboardLayout from '../components/layout/DashboardLayout';
@@ -131,5 +131,9 @@ export const router = createBrowserRouter([
         ],
       },
     ],
+  },
+   {
+    path: '*',
+    element: <Navigate to="/" replace />,
   },
 ]);
