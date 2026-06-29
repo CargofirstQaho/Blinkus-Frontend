@@ -83,7 +83,7 @@ export default function Hero() {
             to="/login"
             className="btn-primary text-lg px-8 py-4 w-full sm:w-auto flex items-center justify-center gap-2"
           >
-            Get Started <ArrowRight size={20} />
+            Chat Now <ArrowRight size={20} />
           </Link>
           <Link
             to="/login"
