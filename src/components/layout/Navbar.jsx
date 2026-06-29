@@ -84,7 +84,7 @@ export default function Navbar() {
                 to="/dashboard"
                 className="text-sm font-medium text-black/60 hover:text-accent transition-colors"
               >
-                Dashboard
+                Chat
               </Link>
               <button
                 onClick={handleLogout}
@@ -138,7 +138,7 @@ export default function Navbar() {
                   onClick={closeMobile}
                   className="text-lg font-medium text-black/70 hover:text-accent"
                 >
-                  Dashboard
+                  Chat
                 </Link>
                 <Link
                   to="/profile"
