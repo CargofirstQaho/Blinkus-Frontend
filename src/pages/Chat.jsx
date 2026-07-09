@@ -5,9 +5,6 @@ import { motion } from 'motion/react';
 import { Send, Bot, User, Copy, Check, Loader2 } from 'lucide-react';
 import { toast } from 'react-toastify';
 import {
-  setConversations,
-  prependConversation,
-  updateConvLastMessage,
   setMessages,
   appendMessage,
   removeLastMessage,
@@ -16,6 +13,11 @@ import {
   selectMessages,
   selectActiveConvId,
 } from '../redux/slices/chatSlice';
+import {
+  fetchChatHistory,
+  prependConversation,
+  updateConvLastMessage,
+} from '../redux/slices/chatHistorySlice';
 import { apiFetch, SessionExpiredError } from '../lib/apiFetch';
 import { cn } from '../lib/utils';
 import Spinner from '../components/ui/Spinner';
@@ -121,18 +123,6 @@ export default function Chat() {
 
   // ── Data loading ─────────────────────────────────────────────────────────
 
-  const loadConversations = useCallback(async () => {
-    try {
-      const res  = await apiFetch(`${BACKEND_URL}/api/chat/conversations`);
-      const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(data.message || 'Failed to load conversations');
-      dispatch(setConversations(data.data.conversations));
-    } catch (err) {
-      if (err instanceof SessionExpiredError) return;
-      if (err.name !== 'TypeError') toast.error(err.message || 'Failed to load conversations');
-    }
-  }, [dispatch]);
-
   const loadMessages = useCallback(async (id) => {
     setLoadingMsgs(true);
     try {
@@ -153,7 +143,7 @@ export default function Chat() {
     }
   }, [dispatch]);
 
-  useEffect(() => { loadConversations(); }, [loadConversations]);
+  useEffect(() => { dispatch(fetchChatHistory()); }, [dispatch]);
 
   useEffect(() => {
     if (isNew) { dispatch(clearChat()); return; }
@@ -291,7 +281,7 @@ export default function Chat() {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             disabled={isSending}
-            placeholder="Ask about commodity prices, HS codes, trade regulations..."
+            placeholder="Ask about prices,HS codes,trade regulations..."
             className="flex-1 resize-none px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl border border-black/10 bg-black/3 outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all text-sm disabled:opacity-60 overflow-hidden [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
             onInput={(e) => {
               e.target.style.height = 'auto';

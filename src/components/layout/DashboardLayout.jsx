@@ -5,10 +5,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { motion } from 'motion/react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { Menu, User, Settings, LogOut, ChevronDown } from 'lucide-react';
+import { Menu, Settings, LogOut, ChevronDown, Crown, ArrowUpRight } from 'lucide-react';
 import { clearUser, selectUser } from '../../redux/slices/authSlice';
 import { clearChat } from '../../redux/slices/chatSlice';
+import { clearEntitlements } from '../../redux/slices/entitlementSlice';
+import { resetState } from '../../redux/store';
 import Sidebar from '../dashboard/sidebar/Sidebar';
+import { useEntitlements } from '../dashboard/subscriptions/hooks/useEntitlements';
 import { cn } from '../../lib/utils';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -18,12 +21,21 @@ function getInitials(name) {
   return name.trim().split(/\s+/).map((n) => n[0]).slice(0, 2).join('').toUpperCase();
 }
 
+function formatExpiry(date) {
+  if (!date) return null;
+  return new Date(date).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
 function UserAvatarDropdown() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user     = useSelector(selectUser);
+  const { trade } = useEntitlements();
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
+
+  const isTradeActive = trade?.status === 'active' && trade?.unlimitedAccess;
+  const tradeExpiry = formatExpiry(trade?.endDate);
 
   useEffect(() => {
     if (!open) return;
@@ -39,13 +51,13 @@ function UserAvatarDropdown() {
     try {
       await fetch(`${BACKEND_URL}/api/auth/logout`, {
         method:      'POST',
-        headers:     { Authorization: `Bearer ${localStorage.getItem('blinkus_token')}` },
         credentials: 'include',
       });
     } catch {}
-    localStorage.removeItem('blinkus_token');
     dispatch(clearUser());
     dispatch(clearChat());
+    dispatch(clearEntitlements());
+    dispatch(resetState());
     navigate('/');
   };
 
@@ -79,18 +91,29 @@ function UserAvatarDropdown() {
           </div>
 
           <Link
-            to="/profile"
-            onClick={() => setOpen(false)}
-            className="flex items-center gap-2.5 px-4 py-2 text-sm text-black/60 hover:bg-black/3 hover:text-black transition-colors"
-          >
-            <User size={14} /> Profile
-          </Link>
-          <Link
             to="/settings"
             onClick={() => setOpen(false)}
             className="flex items-center gap-2.5 px-4 py-2 text-sm text-black/60 hover:bg-black/3 hover:text-black transition-colors"
           >
             <Settings size={14} /> Settings
+          </Link>
+
+          <Link
+            to="/trade/upgrade"
+            onClick={() => setOpen(false)}
+            className="flex items-center gap-2.5 px-4 py-2 text-sm transition-colors"
+            style={{ color: '#1d4ed8' }}
+          >
+            <Crown size={14} />
+            <span className="flex-1">
+              {isTradeActive ? 'Current Plan' : 'Upgrade'}
+              {isTradeActive && tradeExpiry && (
+                <span className="block text-[11px]" style={{ color: '#64748b' }}>
+                  Expires {tradeExpiry}
+                </span>
+              )}
+            </span>
+            <ArrowUpRight size={13} />
           </Link>
 
           <div className="my-1 mx-3 border-t border-black/5" />
@@ -127,7 +150,7 @@ export default function DashboardLayout() {
         dropdown in the header is not clipped by this container.
       */}
       <div className="flex-1 flex flex-col min-w-0 overflow-x-hidden">
-        <header className="relative flex items-center justify-between px-4 h-14 bg-white border-b border-black/5 shrink-0 z-20">
+        <header className="flex items-center justify-between px-4 h-14 bg-white border-b border-black/5 shrink-0">
           <button
             type="button"
             onClick={() => setSidebarOpen(true)}

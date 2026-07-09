@@ -8,6 +8,8 @@ import { cn } from '@/src/lib/utils.js';
 import BrandLogo from '../common/BrandLogo';
 import { clearUser, selectIsAuthenticated } from '../../redux/slices/authSlice';
 import { clearChat } from '../../redux/slices/chatSlice';
+import { clearEntitlements } from '../../redux/slices/entitlementSlice';
+import { resetState } from '../../redux/store';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -35,15 +37,15 @@ export default function Navbar() {
     try {
       await fetch(`${BACKEND_URL}/api/auth/logout`, {
         method:  'POST',
-        headers: { Authorization: `Bearer ${localStorage.getItem('blinkus_token')}` },
         credentials: 'include',
       });
     } catch {
       // proceed with local logout regardless
     } finally {
-      localStorage.removeItem('blinkus_token');
       dispatch(clearUser());
       dispatch(clearChat());
+      dispatch(clearEntitlements());
+      dispatch(resetState());
       setMobileMenuOpen(false);
       navigate('/');
     }
@@ -83,7 +85,7 @@ export default function Navbar() {
               <Link
                 to="/dashboard"
                 className="text-sm font-medium text-black/60 hover:text-accent transition-colors"
-              >
+              > 
                 Chat
               </Link>
               <button

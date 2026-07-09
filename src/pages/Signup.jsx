@@ -12,11 +12,12 @@ const INIT_ERRORS = { name: '', email: '', mobile: '', password: '' };
 export default function Signup() {
   const navigate = useNavigate();
 
-  const [name,      setName]      = useState('');
-  const [email,     setEmail]     = useState('');
-  const [mobile,    setMobile]    = useState('');
-  const [password,  setPassword]  = useState('');
-  const [showPass,  setShowPass]  = useState(false);
+  const [name,          setName]          = useState('');
+  const [email,         setEmail]         = useState('');
+  const [mobile,        setMobile]        = useState('');
+  const [password,      setPassword]      = useState('');
+  const [showPass,      setShowPass]      = useState(false);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [loading,   setLoading]   = useState(false);
   const [errors,    setErrors]    = useState(INIT_ERRORS);
   const [formError, setFormError] = useState('');
@@ -69,6 +70,11 @@ export default function Signup() {
     setFormError('');
     if (!validate()) return;
 
+    if (!agreedToTerms) {
+      setFormError('You must agree to the Terms of Service and Privacy Policy to create an account.');
+      return;
+    }
+
     setLoading(true);
     try {
       const response = await fetch(`${BACKEND_URL}/api/auth/signup`, {
@@ -80,6 +86,7 @@ export default function Signup() {
           email:    email.trim(),
           mobile:   mobile.trim(),
           password,
+          termsAccepted: agreedToTerms,
         }),
       });
 
@@ -269,6 +276,27 @@ export default function Signup() {
               <FieldError id="err-password" msg={errors.password} />
             </div>
 
+            <label className="flex items-start gap-2.5 cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={agreedToTerms}
+                onChange={(e) => { setAgreedToTerms(e.target.checked); setFormError(''); }}
+                disabled={loading}
+                className="mt-0.5 w-4 h-4 shrink-0 rounded border-black/20 text-accent focus:ring-2 focus:ring-accent/20 disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+              />
+              <span className="text-xs text-black/50 leading-relaxed">
+                I have read and agree to the{' '}
+                <Link to="/terms-of-service" target="_blank" rel="noopener noreferrer" className="underline hover:text-accent">
+                  Terms of Service
+                </Link>{' '}
+                and{' '}
+                <Link to="/privacy-policy" target="_blank" rel="noopener noreferrer" className="underline hover:text-accent">
+                  Privacy Policy
+                </Link>
+                .
+              </span>
+            </label>
+
             {formError && (
               <div role="alert" className="rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700 flex items-start gap-2.5">
                 <AlertCircle size={15} className="shrink-0 mt-0.5" />
@@ -278,7 +306,7 @@ export default function Signup() {
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={loading || !agreedToTerms}
               className="w-full btn-primary py-3.5 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed mt-2"
             >
               {loading ? (
@@ -287,12 +315,6 @@ export default function Signup() {
                 <>Create Account <ArrowRight size={18} /></>
               )}
             </button>
-
-            <p className="text-xs text-black/30 text-center">
-              By signing up you agree to our{' '}
-              <a href="#" className="underline hover:text-accent">Terms</a> and{' '}
-              <a href="#" className="underline hover:text-accent">Privacy Policy</a>.
-            </p>
           </form>
 
           <div className="my-6 flex items-center gap-4">
@@ -301,7 +323,7 @@ export default function Signup() {
             <div className="flex-1 h-px bg-black/10" />
           </div>
 
-          <GoogleAuthButton disabled={loading} />
+          <GoogleAuthButton disabled={loading || !agreedToTerms} />
         </motion.div>
       </div>
     </div>

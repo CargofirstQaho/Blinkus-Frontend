@@ -4,18 +4,9 @@ import { ChevronDown } from 'lucide-react';
 import { useSidebar } from './SidebarContext';
 import { cn } from '../../../lib/utils';
 
-/**
- * Reusable sidebar group wrapper.
- * Supports optional visible label, optional collapsible accordion, and
- * badge / icon on the section header.
- *
- * Usage (scalable — add any nav items as children):
- *   <SidebarSection label="Analytics" collapsible>
- *     <NavItem ... />
- *   </SidebarSection>
- */
 export default function SidebarSection({
   label,
+  icon: Icon,
   collapsible = false,
   defaultOpen = true,
   className,
@@ -27,21 +18,28 @@ export default function SidebarSection({
 
   return (
     <div className={cn('mt-1', className)}>
-      {label && showText && (
+      {(label || Icon) && (
         <button
           type="button"
           onClick={() => collapsible && setOpen((o) => !o)}
+          title={!showText && label ? label : undefined}
           className={cn(
-            'w-full flex items-center gap-2 px-3 py-1 text-[10px] font-bold text-black/25 uppercase tracking-[0.1em] select-none',
-            collapsible ? 'hover:text-black/50 cursor-pointer transition-colors' : 'cursor-default'
+            'w-full flex items-center gap-3 rounded-xl text-sm font-medium text-black/60 transition-all select-none',
+            showText ? 'px-3 py-2.5' : 'justify-center p-2.5',
+            collapsible ? 'hover:bg-black/5 hover:text-black cursor-pointer' : 'cursor-default'
           )}
         >
-          <span className="flex-1 text-left">{label}</span>
-          {collapsible && (
-            <ChevronDown
-              size={10}
-              className={cn('transition-transform duration-200', open && 'rotate-180')}
-            />
+          {Icon && <Icon size={18} className="shrink-0" />}
+          {showText && (
+            <>
+              <span className="flex-1 text-left">{label}</span>
+              {collapsible && (
+                <ChevronDown
+                  size={14}
+                  className={cn('transition-transform duration-200 text-black/30', open && 'rotate-180')}
+                />
+              )}
+            </>
           )}
         </button>
       )}

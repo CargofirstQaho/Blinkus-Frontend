@@ -1,17 +1,24 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
-import { User, Mail, Phone, Building, Save, Camera, Lock, CheckCircle2, Shield } from 'lucide-react';
+import { User, Mail, Phone, Building, Save, Camera, Lock, CheckCircle2, Shield, MapPin, ImageOff, Loader2, ScrollText, FileCheck2, CalendarClock, BadgeCheck } from 'lucide-react';
 import { toast } from 'react-toastify';
 import { selectUser, setUser } from '../redux/slices/authSlice';
 import { apiFetch, SessionExpiredError } from '../lib/apiFetch';
 import { cn } from '../lib/utils';
+// import SubscriptionStatusCard from '../components/dashboard/subscriptions/components/SubscriptionStatusCard';
+import { useEntitlements } from '../components/dashboard/subscriptions/hooks/useEntitlements';
+import { useOrganization } from '../features/trade/organization/hooks/useOrganization';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 export default function Profile() {
   const dispatch = useDispatch();
   const user     = useSelector(selectUser);
+  const { trade, canAccessErp } = useEntitlements();
+
+  const { organization, loading: orgLoading } = useOrganization({ enabled: canAccessErp });
 
   const [form, setForm] = useState({
     name:    user?.name    || '',
@@ -40,7 +47,7 @@ export default function Profile() {
       });
       const data = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(data.message || 'Failed to update profile');
-      dispatch(setUser({ user: data.data.user, token: localStorage.getItem('blinkus_token') }));
+      dispatch(setUser({ user: data.data.user }));
       toast.success('Profile updated');
     } catch (err) {
       if (err instanceof SessionExpiredError) return;
@@ -68,6 +75,13 @@ export default function Profile() {
     .slice(0, 2)
     .join('');
 
+  const termsAcceptance = user?.termsAcceptance;
+  const acceptedViaLabels = {
+    signup:      'Signup',
+    'google-auth': 'Google Sign-In',
+    'policy-update': 'Policy Update',
+  };
+
   return (
     <div className="p-4 sm:p-6 md:p-8 max-w-5xl mx-auto">
       <motion.div
@@ -86,7 +100,9 @@ export default function Profile() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-6">
 
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 flex flex-col gap-5 sm:gap-6">
+            {/* <SubscriptionStatusCard trade={trade} /> */}
+
             <div
               className="bg-white rounded-2xl overflow-hidden"
               style={{ border: '1px solid rgba(37,99,235,0.1)', boxShadow: '0 1px 12px rgba(37,99,235,0.06)' }}
@@ -318,6 +334,140 @@ export default function Profile() {
             </div>
           </div>
 
+        </div>
+
+        {(orgLoading || organization) && (
+          <div
+            className="mt-5 sm:mt-6 bg-white rounded-2xl overflow-hidden"
+            style={{ border: '1px solid rgba(37,99,235,0.1)', boxShadow: '0 1px 12px rgba(37,99,235,0.06)' }}
+          >
+            <div
+              className="px-6 py-4"
+              style={{ borderBottom: '1px solid rgba(37,99,235,0.08)' }}
+            >
+              <h2 className="font-bold text-sm" style={{ color: '#0f172a' }}>Organization</h2>
+              <p className="text-[11px] mt-0.5" style={{ color: '#94a3b8' }}>Your registered business details</p>
+            </div>
+
+            {orgLoading ? (
+              <div className="flex items-center justify-center py-10">
+                <Loader2 size={20} className="animate-spin" style={{ color: '#3b82f6' }} />
+              </div>
+            ) : (
+              <div className="p-6 flex flex-col sm:flex-row items-start gap-5">
+                <div
+                  className="w-16 h-16 rounded-2xl overflow-hidden flex items-center justify-center shrink-0 bg-slate-50"
+                  style={{ border: '1px solid #e2e8f0' }}
+                >
+                  {organization.logoUrl ? (
+                    <img src={organization.logoUrl} alt="Organization logo" className="w-full h-full object-cover" />
+                  ) : (
+                    <ImageOff size={20} style={{ color: '#cbd5e1' }} />
+                  )}
+                </div>
+                <div className="flex flex-col gap-2 min-w-0">
+                  <p className="font-semibold text-sm leading-snug" style={{ color: '#0f172a' }}>
+                    {organization.organizationName}
+                  </p>
+                  <div className="flex items-center gap-1.5 text-xs" style={{ color: '#64748b' }}>
+                    <Mail size={12} className="shrink-0" />
+                    <span className="truncate">{organization.organizationEmail}</span>
+                  </div>
+                  {organization.location && (
+                    <div className="flex items-center gap-1.5 text-xs" style={{ color: '#64748b' }}>
+                      <MapPin size={12} className="shrink-0" />
+                      <span>{organization.location}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
+
+        <div
+          className="mt-5 sm:mt-6 bg-white rounded-2xl overflow-hidden"
+          style={{ border: '1px solid rgba(37,99,235,0.1)', boxShadow: '0 1px 12px rgba(37,99,235,0.06)' }}
+        >
+          <div
+            className="px-6 py-4"
+            style={{ borderBottom: '1px solid rgba(37,99,235,0.08)' }}
+          >
+            <h2 className="font-bold text-sm" style={{ color: '#0f172a' }}>Legal & Compliance</h2>
+            <p className="text-[11px] mt-0.5" style={{ color: '#94a3b8' }}>Your Terms of Service and Privacy Policy consent status</p>
+          </div>
+
+          <div className="p-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-5">
+              {[
+                {
+                  icon: FileCheck2,
+                  label: 'Terms Accepted',
+                  value: termsAcceptance?.accepted ? 'Yes' : 'No',
+                },
+                {
+                  icon: CalendarClock,
+                  label: 'Accepted Date',
+                  value: termsAcceptance?.acceptedAt
+                    ? new Date(termsAcceptance.acceptedAt).toLocaleString()
+                    : 'Not yet accepted',
+                },
+                {
+                  icon: BadgeCheck,
+                  label: 'Accepted Version',
+                  value: termsAcceptance?.version || '—',
+                },
+                {
+                  icon: ScrollText,
+                  label: 'Accepted Via',
+                  value: termsAcceptance?.acceptedVia
+                    ? (acceptedViaLabels[termsAcceptance.acceptedVia] || termsAcceptance.acceptedVia)
+                    : '—',
+                },
+              ].map(({ icon: Icon, label, value }) => (
+                <div key={label} className="flex items-center gap-2.5">
+                  <div
+                    className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0"
+                    style={{ background: 'rgba(37,99,235,0.07)', border: '1px solid rgba(37,99,235,0.12)' }}
+                  >
+                    <Icon size={13} style={{ color: '#3b82f6' }} />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[9px] font-bold uppercase tracking-widest" style={{ color: '#94a3b8' }}>
+                      {label}
+                    </p>
+                    <p className="text-xs font-medium truncate mt-0.5" style={{ color: '#334155' }}>
+                      {value}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div
+              className="flex flex-col sm:flex-row gap-3 pt-5"
+              style={{ borderTop: '1px solid rgba(37,99,235,0.08)' }}
+            >
+              <Link
+                to="/terms-of-service"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-xl transition-colors hover:bg-blue-50"
+                style={{ border: '1px solid rgba(37,99,235,0.15)', color: '#2563eb' }}
+              >
+                Read Terms of Service
+              </Link>
+              <Link
+                to="/privacy-policy"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-xl transition-colors hover:bg-blue-50"
+                style={{ border: '1px solid rgba(37,99,235,0.15)', color: '#2563eb' }}
+              >
+                Read Privacy Policy
+              </Link>
+            </div>
+          </div>
         </div>
       </motion.div>
     </div>

@@ -1,6 +1,7 @@
-import { ShieldCheck, FileText, Landmark, AlertTriangle, Search, Ship, ClipboardList, Globe } from 'lucide-react';
+import { ShieldCheck, FileText, Landmark, AlertTriangle, Search, Ship, ClipboardList, Globe,Workflow  } from 'lucide-react';
 
 export const COMING_SOON_MODULES = [
+  
   {
     id: 'credibility',
     label: 'Credibility',
@@ -19,6 +20,17 @@ export const COMING_SOON_MODULES = [
     icon: FileText,
     name: 'Contract Drafting',
     description: 'AI-assisted international trade agreements, clause recommendations, Incoterms support.',
+    status: 'Building',
+    eta: 'Coming Soon',
+    color: '#2563eb',
+  },
+   {
+    id: 'endToEnd-workflow',
+    label: 'End To End Workflow',
+    route: null,
+    icon: Workflow ,
+    name: 'End To End Workflow',
+    description: 'AI-powered workflow automation covering the complete export and import process from inquiry, documentation, inspection, shipment, customs, to payment.',
     status: 'Building',
     eta: 'Coming Soon',
     color: '#2563eb',
@@ -89,6 +101,7 @@ export const COMING_SOON_MODULES = [
     eta: 'Coming Soon',
     color: '#2563eb',
   },
+ 
 ];
 
 export const ROADMAP_PHASES = [

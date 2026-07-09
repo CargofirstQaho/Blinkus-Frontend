@@ -1,17 +1,15 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { MessageSquare, Zap, ArrowRight, BarChart3, Shield, Plus, Clock } from 'lucide-react';
-import { toast } from 'react-toastify';
-import { setConversations, selectConversations } from '../redux/slices/chatSlice';
-import { apiFetch, SessionExpiredError } from '../lib/apiFetch';
+import { fetchChatHistory, selectConversations, selectChatHistoryStatus } from '../redux/slices/chatHistorySlice';
 import HeroBanner from '../components/dashboard/banner/HeroBanner';
 import Spinner from '../components/ui/Spinner';
 import FutureBanner from '../components/dashboard/comingSoon/FutureBanner';
 import ComingSoonSection from '../components/dashboard/comingSoon/ComingSoonSection';
 import RoadmapTimeline from '../components/dashboard/comingSoon/RoadmapTimeline';
-
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+// import SubscriptionStatusCard from '../components/dashboard/subscriptions/components/SubscriptionStatusCard';
+import { useEntitlements } from '../components/dashboard/subscriptions/hooks/useEntitlements';
 
 const QUICK_ACTIONS = [
   { label: 'Ask Trade Agent', icon: MessageSquare, href: '/chat/new', desc: 'Get AI-powered trade insights' },
@@ -24,31 +22,15 @@ export default function Dashboard() {
   const dispatch      = useDispatch();
   const navigate      = useNavigate();
   const conversations = useSelector(selectConversations);
-  const [loading, setLoading] = useState(false);
+  const historyStatus = useSelector(selectChatHistoryStatus);
+  const { trade } = useEntitlements();
   const roadmapRef = useRef(null);
 
   useEffect(() => {
-    const loadConversations = async () => {
-      setLoading(true);
-      try {
-        const res  = await apiFetch(`${BACKEND_URL}/api/chat/conversations`);
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok) throw new Error(data.message || 'Failed to load conversations');
-        dispatch(setConversations(data.data.conversations));
-      } catch (err) {
-        if (err instanceof SessionExpiredError) return;
-        if (err.name === 'TypeError') {
-          toast.error('Cannot connect to server. Please try again.');
-        } else {
-          toast.error(err.message || 'Something went wrong');
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    loadConversations();
+    dispatch(fetchChatHistory());
   }, [dispatch]);
+
+  const loading = historyStatus === 'idle' || historyStatus === 'loading';
 
   return (
     <div className="p-4 sm:p-6 md:p-8 max-w-7xl mx-auto">
@@ -88,7 +70,10 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl border border-black/5 overflow-hidden">
+        <div className="flex flex-col gap-4 sm:gap-6">
+          {/* <SubscriptionStatusCard trade={trade} compact /> */}
+
+          <div className="bg-white rounded-2xl border border-black/5 overflow-hidden">
           <div className="p-4 sm:p-5 border-b border-black/5 flex items-center justify-between">
             <h2 className="font-display font-bold">Recent Chats</h2>
             <Clock size={16} className="text-black/30" />
@@ -128,6 +113,7 @@ export default function Dashboard() {
                 ))}
               </div>
             )}
+          </div>
           </div>
         </div>
       </div>

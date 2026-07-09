@@ -30,6 +30,10 @@ export default defineConfig(() => {
     server: {
       hmr: process.env.DISABLE_HMR !== 'true',
       watch: process.env.DISABLE_HMR === 'true' ? null : {},
+      allowedHosts: [
+      'wormlike-magdalen-deductively.ngrok-free.dev',
+      'good-emus-wait.loca.lt'
+    ]
     },
   };
 });

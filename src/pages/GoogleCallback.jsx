@@ -46,8 +46,7 @@ export default function GoogleCallback() {
         const data = await res.json().catch(() => ({}));
         if (!res.ok) throw new Error(data.message || 'Google authentication failed');
 
-        localStorage.setItem('blinkus_token', data.data.token);
-        dispatch(setUser({ user: data.data.user, token: data.data.token, usage: data.data.usage }));
+        dispatch(setUser({ user: data.data.user, usage: data.data.usage }));
         navigate('/dashboard', { replace: true });
       } catch (err) {
         const msg = err.name === 'TypeError'

@@ -4,7 +4,6 @@ const authSlice = createSlice({
   name: 'auth',
   initialState: {
     user:            null,
-    token:           null,
     isAuthenticated: false,
     authLoading:     false,
     initialized:     false,
@@ -21,7 +20,6 @@ const authSlice = createSlice({
   reducers: {
     setUser(state, { payload }) {
       state.user            = payload.user;
-      state.token           = payload.token;
       state.isAuthenticated = true;
 
       if (payload.user) {
@@ -38,7 +36,6 @@ const authSlice = createSlice({
 
     clearUser(state) {
       state.user               = null;
-      state.token              = null;
       state.isAuthenticated    = false;
       state.plan               = 'free';
       state.isPremium          = false;
@@ -74,7 +71,6 @@ export const {
 } = authSlice.actions;
 
 export const selectUser               = (state) => state.auth.user;
-export const selectToken              = (state) => state.auth.token;
 export const selectIsAuthenticated    = (state) => state.auth.isAuthenticated;
 export const selectAuthLoading        = (state) => state.auth.authLoading;
 export const selectAuthInitialized    = (state) => state.auth.initialized;
@@ -83,5 +79,7 @@ export const selectIsPremium          = (state) => state.auth.isPremium;
 export const selectPermissions        = (state) => state.auth.permissions;
 export const selectSubscriptionEndsAt = (state) => state.auth.subscriptionEndsAt;
 export const selectUsage              = (state) => state.auth.usage;
+export const selectTermsAcceptance    = (state) => state.auth.user?.termsAcceptance ?? null;
+export const selectTermsAccepted      = (state) => state.auth.user?.termsAcceptance?.accepted ?? false;
 
 export default authSlice.reducer;

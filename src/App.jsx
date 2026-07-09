@@ -113,7 +113,11 @@ import {
   setAuthLoading,
   setInitialized,
   selectAuthInitialized,
+  selectIsAuthenticated,
+  selectTermsAccepted,
 } from './redux/slices/authSlice';
+import { fetchChatHistory } from './redux/slices/chatHistorySlice';
+import { clearEntitlements } from './redux/slices/entitlementSlice';
 
 import { router } from './routes/router';
 import Spinner from './components/ui/Spinner';
@@ -124,11 +128,10 @@ const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 // Google Analytics Initialize
 ReactGA.initialize('G-9J495WN00F');
 
-async function fetchMe(token) {
+async function fetchMe() {
   const res = await fetch(`${BACKEND_URL}/api/auth/me`, {
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
     },
     credentials: 'include',
   });
@@ -145,22 +148,20 @@ async function fetchMe(token) {
   };
 }
 
-async function fetchNewToken() {
+async function refreshSession() {
   const res = await fetch(`${BACKEND_URL}/api/auth/refresh`, {
     method: 'POST',
     credentials: 'include',
   });
 
-  if (!res.ok) return null;
-
-  const data = await res.json().catch(() => null);
-
-  return data?.data?.token ?? null;
+  return res.ok;
 }
 
 function AppCore() {
   const dispatch = useDispatch();
   const initialized = useSelector(selectAuthInitialized);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const termsAccepted = useSelector(selectTermsAccepted);
 
   // Google Analytics Page Tracking
   useEffect(() => {
@@ -188,17 +189,29 @@ function AppCore() {
       dispatch(setAuthLoading(true));
 
       try {
-        let token = localStorage.getItem('blinkus_token');
+        const result = await fetchMe();
 
-        if (token) {
-          const result = await fetchMe(token);
+        if (result) {
+          dispatch(
+            setUser({
+              user: result.user,
+              usage: result.usage,
+            })
+          );
 
-          if (result) {
+          return;
+        }
+
+        const refreshed = await refreshSession();
+
+        if (refreshed) {
+          const retryResult = await fetchMe();
+
+          if (retryResult) {
             dispatch(
               setUser({
-                user: result.user,
-                token,
-                usage: result.usage,
+                user: retryResult.user,
+                usage: retryResult.usage,
               })
             );
 
@@ -206,31 +219,11 @@ function AppCore() {
           }
         }
 
-        const newToken = await fetchNewToken();
-
-        if (newToken) {
-          localStorage.setItem('blinkus_token', newToken);
-
-          const result = await fetchMe(newToken);
-
-          if (result) {
-            dispatch(
-              setUser({
-                user: result.user,
-                token: newToken,
-                usage: result.usage,
-              })
-            );
-
-            return;
-          }
-        }
-
-        localStorage.removeItem('blinkus_token');
         dispatch(clearUser());
+        dispatch(clearEntitlements());
       } catch {
-        localStorage.removeItem('blinkus_token');
         dispatch(clearUser());
+        dispatch(clearEntitlements());
       } finally {
         dispatch(setAuthLoading(false));
         dispatch(setInitialized());
@@ -239,6 +232,13 @@ function AppCore() {
 
     restoreSession();
   }, [dispatch]);
+
+  // Hydrate Chat History (global, available regardless of current page)
+  useEffect(() => {
+    if (initialized && isAuthenticated && termsAccepted) {
+      dispatch(fetchChatHistory());
+    }
+  }, [initialized, isAuthenticated, termsAccepted, dispatch]);
 
   if (!initialized) return <Spinner fullScreen />;
 

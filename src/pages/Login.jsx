@@ -76,8 +76,7 @@ export default function Login() {
         throw new Error(data.message || 'Login failed. Please check your credentials.');
       }
 
-      localStorage.setItem('blinkus_token', data.data.token);
-      dispatch(setUser({ user: data.data.user, token: data.data.token, usage: data.data.usage }));
+      dispatch(setUser({ user: data.data.user, usage: data.data.usage }));
       navigate('/dashboard');
     } catch (err) {
       setFormError(

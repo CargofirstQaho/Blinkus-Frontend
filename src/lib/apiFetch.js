@@ -1,5 +1,6 @@
-import { store } from '../redux/store';
+import { store, resetState } from '../redux/store';
 import { clearUser } from '../redux/slices/authSlice';
+import { clearEntitlements } from '../redux/slices/entitlementSlice';
 import { toast } from 'react-toastify';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -12,12 +13,8 @@ async function doRefresh() {
     method: 'POST',
     credentials: 'include',
   })
-    .then(async (res) => {
-      if (!res.ok) return null;
-      const data = await res.json().catch(() => null);
-      return data?.data?.token ?? null;
-    })
-    .catch(() => null)
+    .then((res) => res.ok)
+    .catch(() => false)
     .finally(() => { _inflightRefresh = null; });
   return _inflightRefresh;
 }
@@ -30,28 +27,24 @@ export class SessionExpiredError extends Error {
 }
 
 export async function apiFetch(url, options = {}) {
-  const buildOpts = (token) => ({
+  const buildOpts = () => ({
     ...options,
-    headers: {
-      ...options.headers,
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-    },
+    headers: { ...options.headers },
     credentials: 'include',
   });
 
-  const token = localStorage.getItem('blinkus_token');
-  let res = await fetch(url, buildOpts(token));
+  let res = await fetch(url, buildOpts());
 
   if (res.status !== 401) return res;
 
-  const newToken = await doRefresh();
-  if (!newToken) {
-    localStorage.removeItem('blinkus_token');
+  const refreshed = await doRefresh();
+  if (!refreshed) {
     store.dispatch(clearUser());
+    store.dispatch(clearEntitlements());
+    store.dispatch(resetState());
     toast.error('Session expired. Please sign in again.');
     throw new SessionExpiredError();
   }
 
-  localStorage.setItem('blinkus_token', newToken);
-  return fetch(url, buildOpts(newToken));
+  return fetch(url, buildOpts());
 }

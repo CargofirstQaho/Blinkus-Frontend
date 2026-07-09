@@ -18,11 +18,9 @@ export default function UserNav() {
     try {
       await fetch(`${BACKEND_URL}/api/auth/logout`, {
         method:      'POST',
-        headers:     { Authorization: `Bearer ${localStorage.getItem('blinkus_token')}` },
         credentials: 'include',
       });
     } catch {}
-    localStorage.removeItem('blinkus_token');
     dispatch(clearUser());
     dispatch(clearChat());
     onClose?.();

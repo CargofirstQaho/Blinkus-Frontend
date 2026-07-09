@@ -88,8 +88,7 @@ export default function VerifyOtp() {
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.message || 'Verification failed');
 
-      localStorage.setItem('blinkus_token', data.data.token);
-      dispatch(setUser({ user: data.data.user, token: data.data.token, usage: data.data.usage }));
+      dispatch(setUser({ user: data.data.user, usage: data.data.usage }));
       sessionStorage.removeItem('blinkus_verify_email');
       navigate('/dashboard', { replace: true });
     } catch (err) {

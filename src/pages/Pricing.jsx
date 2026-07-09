@@ -42,24 +42,24 @@ const BILLING_OPTIONS = [
 
 const BILLING_PLANS = {
   monthly: {
-    price: '$55',
-    originalPrice: '$63.25',
+    price: '$31',
+    originalPrice: '$35',
     priceSuffix: '/ month',
-    savings: 'Save $8.25',
+    savings: 'Save 11.43%',
   },
   sixMonth: {
-    price: '$237.50',
-    originalPrice: '$285',
-    priceSuffix: '/ 6 months',
+    price: '$22.66',
+    originalPrice: '$186',
+    priceSuffix: '/ months',
     badge: '1 Month Free',
-    savings: 'Save $47.50',
+    savings: 'Save 26.88%',
   },
   yearly: {
-    price: '$500',
-    originalPrice: '$665',
-    priceSuffix: '/ year',
+    price: '$19.16',
+    originalPrice: '$372',
+    priceSuffix: '/ month',
     badge: '2 Months Free',
-    savings: 'Save $165',
+    savings: 'Save 38.17%',
   },
 };
 
@@ -69,7 +69,7 @@ export default function Pricing() {
   const [billingCycle, setBillingCycle] = useState('yearly');
 
   const handleGetStarted = useCallback(() => {
-    navigate(isAuthenticated ? '/dashboard' : '/login');
+    navigate(isAuthenticated ? '/trade/upgrade' : '/login');
   }, [isAuthenticated, navigate]);
 
   const premiumPlan = useMemo(() => BILLING_PLANS[billingCycle], [billingCycle]);
