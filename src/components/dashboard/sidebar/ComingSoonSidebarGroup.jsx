@@ -3,7 +3,7 @@ import SidebarSection from './SidebarSection';
 import NavItem from './NavItem';
 import { COMING_SOON_MODULES } from '../coming-soon/data/comingSoonData';
 
-const SIDEBAR_MODULES = COMING_SOON_MODULES.filter((m) => m.route !== null);
+const SIDEBAR_MODULES = COMING_SOON_MODULES.filter((m) => m.route !== null && m.id !== 'contract-drafting');
 
 export default function ComingSoonSidebarGroup() {
   return (
