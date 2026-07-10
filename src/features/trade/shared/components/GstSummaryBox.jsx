@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Controller } from 'react-hook-form';
 import { Pencil } from 'lucide-react';
 import { useOverridableAmount } from '../hooks/useOverridableAmount';
@@ -40,13 +41,29 @@ function EditableRow({ control, name, label, currency, bold }) {
   );
 }
 
+function ReadOnlyRow({ label, value, currency }) {
+  return (
+    <div className="flex justify-between items-center px-4 py-2.5" style={{ borderBottom: `1px solid ${BORDER}` }}>
+      <span className="text-sm font-semibold" style={{ color: MUTED }}>{label}</span>
+      <span className="font-bold text-sm text-right" style={{ color: TEXT }}>{currency} {(parseFloat(value) || 0).toFixed(2)}</span>
+    </div>
+  );
+}
+
+function useSyncedValue(setValue, name, computed) {
+  useEffect(() => {
+    setValue(name, Number(computed.toFixed(2)), { shouldValidate: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [computed]);
+}
+
 export default function GstSummaryBox({
   control, setValue, subtotal, computedCgst, computedSgst, computedIgst,
   currency, prefix, grandTotalField = 'grandTotal', extraRows = [],
 }) {
-  useOverridableAmount(control, setValue, `${prefix}.cgst`, computedCgst);
-  useOverridableAmount(control, setValue, `${prefix}.sgst`, computedSgst);
-  useOverridableAmount(control, setValue, `${prefix}.igst`, computedIgst);
+  useSyncedValue(setValue, `${prefix}.cgst`, computedCgst);
+  useSyncedValue(setValue, `${prefix}.sgst`, computedSgst);
+  useSyncedValue(setValue, `${prefix}.igst`, computedIgst);
 
   const extraTotal = extraRows.reduce((s, r) => s + (parseFloat(r.value) || 0), 0);
   const computedGrandTotal = subtotal + computedCgst + computedSgst + computedIgst + extraTotal;
@@ -59,9 +76,9 @@ export default function GstSummaryBox({
         <span className="font-bold text-sm" style={{ color: TEXT }}>{currency} {subtotal.toFixed(2)}</span>
       </div>
 
-      <EditableRow control={control} name={`${prefix}.cgst`} label="CGST" currency={currency} />
-      <EditableRow control={control} name={`${prefix}.sgst`} label="SGST" currency={currency} />
-      <EditableRow control={control} name={`${prefix}.igst`} label="IGST" currency={currency} />
+      <ReadOnlyRow label="CGST" value={computedCgst} currency={currency} />
+      <ReadOnlyRow label="SGST" value={computedSgst} currency={currency} />
+      <ReadOnlyRow label="IGST" value={computedIgst} currency={currency} />
 
       {extraRows.map((row) => (
         <div key={row.label} className="flex justify-between items-center px-4 py-2.5" style={{ borderBottom: `1px solid ${BORDER}` }}>

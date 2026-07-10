@@ -1,50 +1,23 @@
 import { useEffect, useMemo, useRef } from 'react';
 import { Controller, useWatch } from 'react-hook-form';
-import { Calculator, Pencil } from 'lucide-react';
+import { Calculator } from 'lucide-react';
 import { Field, Section, inputCls, sanitizeNumber, BRAND, LIGHT, BORDER, TEXT, MUTED } from './FormUI';
 import { computeCreditNoteTotals } from '../constants/creditNoteOptions';
 
-function useOverridableAmount(control, setValue, name, computed) {
-  const watched = useWatch({ control, name });
-  const prevRef = useRef(computed);
-  useEffect(() => {
-    const current = parseFloat(watched);
-    const prev    = prevRef.current;
-    if (Number.isNaN(current) || Math.abs(current - prev) < 0.005) {
-      setValue(name, Number(computed.toFixed(2)), { shouldValidate: true });
-    }
-    prevRef.current = computed;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [computed]);
-  return watched;
-}
-
-function EditableTaxRow({ control, name, label, currency }) {
+function ReadOnlyTaxRow({ label, value, currency }) {
   return (
     <div className="flex justify-between items-center px-4 py-2.5" style={{ borderBottom: `1px solid ${BORDER}` }}>
       <span className="text-sm font-semibold" style={{ color: MUTED }}>{label}</span>
-      <Controller
-        control={control}
-        name={name}
-        render={({ field: { value, onChange, onBlur, ref } }) => (
-          <label className="flex items-center gap-1.5 cursor-text">
-            <span className="text-sm font-semibold" style={{ color: MUTED }}>{currency}</span>
-            <input
-              ref={ref}
-              type="text"
-              inputMode="decimal"
-              value={value == null ? '' : String(value)}
-              onChange={(e) => onChange(sanitizeNumber(e.target.value))}
-              onBlur={onBlur}
-              className="font-bold text-sm text-right bg-transparent outline-none border-0 p-0 w-20"
-              style={{ color: TEXT }}
-            />
-            <Pencil size={12} style={{ color: MUTED }} />
-          </label>
-        )}
-      />
+      <span className="font-bold text-sm text-right" style={{ color: TEXT }}>{currency} {(parseFloat(value) || 0).toFixed(2)}</span>
     </div>
   );
+}
+
+function useSyncedValue(setValue, name, computed) {
+  useEffect(() => {
+    setValue(name, Number(computed.toFixed(2)), { shouldValidate: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [computed]);
 }
 
 export default function CreditNoteSummary({ control, errors, setValue, orgGstNumber }) {
@@ -58,11 +31,11 @@ export default function CreditNoteSummary({ control, errors, setValue, orgGstNum
     [lineItems, placeOfSupply, orgGstNumber]
   );
 
-  const cgst = useOverridableAmount(control, setValue, 'summary.cgst', cgstComputed);
-  const sgst = useOverridableAmount(control, setValue, 'summary.sgst', sgstComputed);
-  const igst = useOverridableAmount(control, setValue, 'summary.igst', igstComputed);
+  useSyncedValue(setValue, 'summary.cgst', cgstComputed);
+  useSyncedValue(setValue, 'summary.sgst', sgstComputed);
+  useSyncedValue(setValue, 'summary.igst', igstComputed);
 
-  const total = subTotal + (parseFloat(cgst) || 0) + (parseFloat(sgst) || 0) + (parseFloat(igst) || 0);
+  const total = subTotal + cgstComputed + sgstComputed + igstComputed;
 
   const prevTotalRef = useRef(total);
   useEffect(() => {
@@ -83,9 +56,9 @@ export default function CreditNoteSummary({ control, errors, setValue, orgGstNum
           <span className="font-bold text-sm" style={{ color: TEXT }}>{currency} {subTotal.toFixed(2)}</span>
         </div>
 
-        <EditableTaxRow control={control} name="summary.cgst" label="CGST" currency={currency} />
-        <EditableTaxRow control={control} name="summary.sgst" label="SGST" currency={currency} />
-        <EditableTaxRow control={control} name="summary.igst" label="IGST" currency={currency} />
+        <ReadOnlyTaxRow label="CGST" value={cgstComputed} currency={currency} />
+        <ReadOnlyTaxRow label="SGST" value={sgstComputed} currency={currency} />
+        <ReadOnlyTaxRow label="IGST" value={igstComputed} currency={currency} />
 
         <div className="flex justify-between items-center px-4 py-2.5" style={{ background: LIGHT, borderBottom: `1px solid ${BORDER}` }}>
           <span className="text-sm font-semibold" style={{ color: BRAND }}>Total</span>
