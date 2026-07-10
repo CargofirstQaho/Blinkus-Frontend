@@ -14,6 +14,7 @@ const initialState = {
   loading: false,
   loaded: false,
   saving: false,
+  error: null,
 };
 
 const mockOrganization = {

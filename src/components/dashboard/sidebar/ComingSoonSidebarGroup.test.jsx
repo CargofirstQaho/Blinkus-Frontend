@@ -51,10 +51,10 @@ describe('ComingSoonSidebarGroup', () => {
       expect(screen.getByText('Credibility')).toBeInTheDocument();
     });
 
-    it('renders Contract Drafting nav item after expansion', () => {
+    it('does not render Contract Drafting nav item after expansion', () => {
       renderComingSoonGroup();
       fireEvent.click(screen.getByRole('button'));
-      expect(screen.getByText('Contract Drafting')).toBeInTheDocument();
+      expect(screen.queryByText('Contract Drafting')).not.toBeInTheDocument();
     });
   });
 });

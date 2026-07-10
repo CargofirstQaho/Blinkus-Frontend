@@ -64,13 +64,10 @@ describe('ContractDraftFormPage', () => {
     expect(screen.getByText('Custom Clauses')).toBeInTheDocument();
     expect(screen.getAllByText('Save Draft').length).toBeGreaterThan(0);
     expect(screen.getAllByText('Save & Review').length).toBeGreaterThan(0);
-
-    await waitFor(() => expect(getLatestContractDraftApi).toHaveBeenCalled());
   });
 
   it('navigates back to the contracts list when "Back to Contracts" is clicked', async () => {
     renderWithProviders(<ContractDraftFormPage />);
-    await waitFor(() => expect(getLatestContractDraftApi).toHaveBeenCalled());
 
     await userEvent.click(screen.getByRole('button', { name: /back to contracts/i }));
     expect(mockNavigate).toHaveBeenCalledWith('/trade/international/contract-drafting');
@@ -78,7 +75,6 @@ describe('ContractDraftFormPage', () => {
 
   it('shows a validation error when saving and reviewing an empty contract', async () => {
     renderWithProviders(<ContractDraftFormPage />);
-    await waitFor(() => expect(getLatestContractDraftApi).toHaveBeenCalled());
 
     const [reviewButton] = screen.getAllByRole('button', { name: /save & review/i });
     await userEvent.click(reviewButton);
@@ -89,7 +85,6 @@ describe('ContractDraftFormPage', () => {
 
   it('adds a custom clause when "Add Clause" is clicked', async () => {
     renderWithProviders(<ContractDraftFormPage />);
-    await waitFor(() => expect(getLatestContractDraftApi).toHaveBeenCalled());
 
     await userEvent.click(screen.getByRole('button', { name: /custom clauses/i }));
     expect(screen.getByText(/No custom clauses yet/i)).toBeInTheDocument();
@@ -103,7 +98,6 @@ describe('ContractDraftFormPage', () => {
 
   it('enables a standard clause and shows its default content', async () => {
     renderWithProviders(<ContractDraftFormPage />);
-    await waitFor(() => expect(getLatestContractDraftApi).toHaveBeenCalled());
 
     await userEvent.click(screen.getByRole('button', { name: /standard clause library/i }));
 
@@ -128,9 +122,10 @@ describe('ContractDraftFormPage', () => {
       shipment: { incoterm: 'FOB', quantity: 100, unit: 'MT' },
       price: { currency: 'USD', unitPrice: 500, totalContractValue: 50000 },
     };
-    getLatestContractDraftApi.mockResolvedValue(mockDraft);
-    renderWithProviders(<ContractDraftFormPage />);
+    getContractByIdApi.mockResolvedValue(mockDraft);
+    renderWithProviders(<ContractDraftFormPage />, { route: '/?id=ct-1' });
 
+    await waitFor(() => expect(getContractByIdApi).toHaveBeenCalledWith('ct-1'));
     await waitFor(() => expect(screen.getByDisplayValue('Buyer Co')).toBeInTheDocument());
 
     expect(screen.getByDisplayValue('Seller Co')).toBeInTheDocument();

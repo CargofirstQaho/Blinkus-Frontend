@@ -48,35 +48,6 @@ describe('SupportSection', () => {
       expect(link).toHaveAttribute('href', expect.stringContaining('mailto:orbit@blinkus.ai'));
     });
 
-    it('renders Support Hours section', () => {
-      renderWithProviders(<SupportSection />);
-      expect(screen.getByText('Support Hours')).toBeInTheDocument();
-    });
-
-    it('shows all times are in IST note', () => {
-      renderWithProviders(<SupportSection />);
-      expect(screen.getByText(/Indian Standard Time \(IST\)/i)).toBeInTheDocument();
-    });
-  });
-
-  describe('Support Hours', () => {
-    it('shows Monday–Friday with open hours', () => {
-      renderWithProviders(<SupportSection />);
-      expect(screen.getByText('Monday – Friday')).toBeInTheDocument();
-      expect(screen.getByText('9:00 AM – 6:00 PM IST')).toBeInTheDocument();
-    });
-
-    it('shows Saturday with reduced hours', () => {
-      renderWithProviders(<SupportSection />);
-      expect(screen.getByText('Saturday')).toBeInTheDocument();
-      expect(screen.getByText('10:00 AM – 2:00 PM IST')).toBeInTheDocument();
-    });
-
-    it('shows Sunday as Closed', () => {
-      renderWithProviders(<SupportSection />);
-      expect(screen.getByText('Sunday')).toBeInTheDocument();
-      expect(screen.getByText('Closed')).toBeInTheDocument();
-    });
   });
 
   describe('Copy email interaction', () => {

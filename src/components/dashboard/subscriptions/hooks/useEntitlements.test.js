@@ -74,14 +74,14 @@ describe('useEntitlements', () => {
     expect(result.current.loaded).toBe(false);
   });
 
-  it('does not throw on a generic error and leaves entitlements unloaded', async () => {
+  it('settles with loaded=true and safe defaults on a generic error', async () => {
     fetchErpSubscriptionStatus.mockRejectedValue(new Error('Network error'));
     const store = createTestStore();
     const { result } = renderHook(() => useEntitlements(), { wrapper: wrapperFor(store) });
 
     await waitFor(() => expect(fetchErpSubscriptionStatus).toHaveBeenCalled());
 
-    expect(result.current.loaded).toBe(false);
+    await waitFor(() => expect(result.current.loaded).toBe(true));
   });
 
   it('refresh can be called manually to update entitlements', async () => {

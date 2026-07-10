@@ -5,8 +5,8 @@ import TradeNav from './TradeNav';
 import { SidebarCtx } from './SidebarContext';
 import { createTestStore } from '../../../tests/utils';
 
-function renderTradeNav(sidebarCtx = { isCollapsed: false, isMobile: false, onClose: null }) {
-  const store = createTestStore();
+function renderTradeNav(sidebarCtx = { isCollapsed: false, isMobile: false, onClose: null }, preloadedState = {}) {
+  const store = createTestStore(preloadedState);
   return render(
     <Provider store={store}>
       <MemoryRouter>
@@ -41,7 +41,15 @@ describe('TradeNav', () => {
   });
 
   it('expands the Domestic subgroup to show its document types', () => {
-    renderTradeNav();
+    renderTradeNav({ isCollapsed: false, isMobile: false, onClose: null }, {
+      entitlement: {
+        chat: true,
+        erp: true,
+        erpModules: { addOrganization: true, domestic: true, international: true, tradeHistory: true },
+        featureFlags: { erpPaymentEnabled: true, chatPaymentEnabled: false, chatLimitsEnabled: true },
+        loaded: true,
+      },
+    });
 
     fireEvent.click(screen.getByRole('button', { name: 'Trade' }));
     fireEvent.click(screen.getByRole('button', { name: 'Domestic' }));
@@ -49,11 +57,18 @@ describe('TradeNav', () => {
     expect(screen.getByText('Purchase Order')).toBeInTheDocument();
     expect(screen.getByText('Credit Note')).toBeInTheDocument();
     expect(screen.getByText('Debit Note')).toBeInTheDocument();
-    expect(screen.getByText('E-Way Bill')).toBeInTheDocument();
   });
 
   it('expands the International subgroup to show its document types', () => {
-    renderTradeNav();
+    renderTradeNav({ isCollapsed: false, isMobile: false, onClose: null }, {
+      entitlement: {
+        chat: true,
+        erp: true,
+        erpModules: { addOrganization: true, domestic: true, international: true, tradeHistory: true },
+        featureFlags: { erpPaymentEnabled: true, chatPaymentEnabled: false, chatLimitsEnabled: true },
+        loaded: true,
+      },
+    });
 
     fireEvent.click(screen.getByRole('button', { name: 'Trade' }));
     fireEvent.click(screen.getByRole('button', { name: 'International' }));

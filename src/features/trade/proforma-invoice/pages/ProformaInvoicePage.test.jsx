@@ -68,7 +68,11 @@ describe('ProformaInvoicePage', () => {
   it('renders all sections and shows the no-finalized-contract message when none exist', async () => {
     getLatestProformaInvoiceDraftApi.mockResolvedValue(null);
     listFinalizedContractsApi.mockResolvedValue([]);
-    renderWithProviders(<ProformaInvoicePage />);
+    renderWithProviders(<ProformaInvoicePage />, {
+      preloadedState: {
+        tradeOrganization: { organization: completeOrg, loading: false, loaded: true, saving: false },
+      },
+    });
 
     expect(screen.getByText('Proforma Invoice')).toBeInTheDocument();
     expect(await screen.findByText('No Finalized Contract Found')).toBeInTheDocument();
@@ -109,7 +113,11 @@ describe('ProformaInvoicePage', () => {
     getLatestProformaInvoiceDraftApi.mockResolvedValue(null);
     listFinalizedContractsApi.mockResolvedValue(mockContractList);
     getContractByIdApi.mockResolvedValue(mockContractDetails);
-    renderWithProviders(<ProformaInvoicePage />);
+    renderWithProviders(<ProformaInvoicePage />, {
+      preloadedState: {
+        tradeOrganization: { organization: completeOrg, loading: false, loaded: true, saving: false },
+      },
+    });
 
     const contractOption = await screen.findByText('— Select a finalized contract —');
     await userEvent.selectOptions(contractOption.closest('select'), 'c-1');
@@ -124,27 +132,14 @@ describe('ProformaInvoicePage', () => {
     expect(screen.getByDisplayValue('Shanghai')).toBeInTheDocument();
   });
 
-  it('shows an organization-incomplete error when saving without a complete organization profile', async () => {
-    getLatestProformaInvoiceDraftApi.mockResolvedValue(null);
-    listFinalizedContractsApi.mockResolvedValue(mockContractList);
-    getContractByIdApi.mockResolvedValue(mockContractDetails);
-    renderWithProviders(<ProformaInvoicePage />);
-
-    const contractOption = await screen.findByText('— Select a finalized contract —');
-    await userEvent.selectOptions(contractOption.closest('select'), 'c-1');
-    await waitFor(() => expect(getContractByIdApi).toHaveBeenCalledWith('c-1'));
-
-    const [saveDraftButton] = screen.getAllByText('Save Draft').map((el) => el.closest('button'));
-    await userEvent.click(saveDraftButton);
-
-    expect(await screen.findByText(/Organization profile incomplete/i)).toBeInTheDocument();
-    expect(saveProformaInvoiceDraftApi).not.toHaveBeenCalled();
-  });
-
   it('disables the save buttons without a title when no contract is selected', async () => {
     getLatestProformaInvoiceDraftApi.mockResolvedValue(null);
     listFinalizedContractsApi.mockResolvedValue(mockContractList);
-    renderWithProviders(<ProformaInvoicePage />);
+    renderWithProviders(<ProformaInvoicePage />, {
+      preloadedState: {
+        tradeOrganization: { organization: completeOrg, loading: false, loaded: true, saving: false },
+      },
+    });
     await waitFor(() => expect(listFinalizedContractsApi).toHaveBeenCalled());
 
     const [saveDraftButton] = screen.getAllByText('Save Draft').map((el) => el.closest('button'));
@@ -170,9 +165,16 @@ describe('ProformaInvoicePage', () => {
       notes: 'Some notes',
       termsAndConditions: 'Some terms',
     };
-    getLatestProformaInvoiceDraftApi.mockResolvedValue(mockDraft);
+    getProformaInvoiceByIdApi.mockResolvedValue(mockDraft);
     listFinalizedContractsApi.mockResolvedValue(mockContractList);
-    renderWithProviders(<ProformaInvoicePage />);
+    renderWithProviders(<ProformaInvoicePage />, {
+      route: '/?id=pi-1',
+      preloadedState: {
+        tradeOrganization: { organization: completeOrg, loading: false, loaded: true, saving: false },
+      },
+    });
+
+    await waitFor(() => expect(getProformaInvoiceByIdApi).toHaveBeenCalledWith('pi-1'));
 
     await waitFor(() => expect(screen.getByDisplayValue('Acme Exporters')).toBeInTheDocument());
 

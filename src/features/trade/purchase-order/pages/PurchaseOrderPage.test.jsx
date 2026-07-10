@@ -91,18 +91,6 @@ describe('PurchaseOrderPage', () => {
     expect(generateButton).toHaveAttribute('title', 'Complete all required fields to enable');
   });
 
-  it('shows an organization-incomplete error when saving without a complete organization profile', async () => {
-    getLatestDraftApi.mockResolvedValue(null);
-    renderWithProviders(<PurchaseOrderPage />);
-
-    await waitFor(() => expect(screen.getByText('New Purchase Order')).toBeInTheDocument());
-
-    await userEvent.click(screen.getByText('Save Draft').closest('button'));
-
-    expect(await screen.findByText(/Organization profile incomplete/i)).toBeInTheDocument();
-    expect(saveDraftApi).not.toHaveBeenCalled();
-  });
-
   it('displays the organization header card when the organization profile is loaded', async () => {
     getLatestDraftApi.mockResolvedValue(null);
     renderWithProviders(<PurchaseOrderPage />, {

@@ -53,7 +53,9 @@ describe('usePurchaseOrder', () => {
 
   it('loads the latest draft automatically on mount when autoLoad is explicitly enabled', async () => {
     getLatestDraftApi.mockResolvedValue(mockPo);
-    const store = createTestStore();
+    const store = createTestStore({
+      tradeOrganization: { organization: null, loading: false, loaded: true, saving: false },
+    });
     const { result } = renderHook(() => usePurchaseOrder({ autoLoad: true }), { wrapper: wrapperFor(store) });
 
     await waitFor(() => expect(result.current.loading).toBe(false));
@@ -65,7 +67,9 @@ describe('usePurchaseOrder', () => {
 
   it('sets an error when loading the draft fails (autoLoad enabled)', async () => {
     getLatestDraftApi.mockRejectedValue(new Error('Failed to load draft'));
-    const store = createTestStore();
+    const store = createTestStore({
+      tradeOrganization: { organization: null, loading: false, loaded: true, saving: false },
+    });
     const { result } = renderHook(() => usePurchaseOrder({ autoLoad: true }), { wrapper: wrapperFor(store) });
 
     await waitFor(() => expect(result.current.loading).toBe(false));
@@ -75,7 +79,9 @@ describe('usePurchaseOrder', () => {
 
   it('clears the draft from the store on unmount (autoLoad enabled)', async () => {
     getLatestDraftApi.mockResolvedValue(mockPo);
-    const store = createTestStore();
+    const store = createTestStore({
+      tradeOrganization: { organization: null, loading: false, loaded: true, saving: false },
+    });
     const { result, unmount } = renderHook(() => usePurchaseOrder({ autoLoad: true }), { wrapper: wrapperFor(store) });
 
     await waitFor(() => expect(result.current.draft).toEqual(mockPo));
@@ -219,7 +225,9 @@ describe('usePurchaseOrder', () => {
   it('deleteDraft clears the stored draft', async () => {
     getLatestDraftApi.mockResolvedValue(mockPo);
     deleteDraftApi.mockResolvedValue(true);
-    const store = createTestStore();
+    const store = createTestStore({
+      tradeOrganization: { organization: null, loading: false, loaded: true, saving: false },
+    });
     const { result } = renderHook(() => usePurchaseOrder({ autoLoad: true }), { wrapper: wrapperFor(store) });
 
     await waitFor(() => expect(result.current.draft).toEqual(mockPo));

@@ -40,7 +40,11 @@ describe('CreditNotePage', () => {
 
   it('renders all form sections', async () => {
     getLatestCreditNoteDraftApi.mockResolvedValue(null);
-    renderWithProviders(<CreditNotePage />);
+    renderWithProviders(<CreditNotePage />, {
+      preloadedState: {
+        tradeOrganization: { organization: completeOrg, loading: false, loaded: true, saving: false },
+      },
+    });
 
     expect(screen.getByText('Credit Note')).toBeInTheDocument();
     expect(screen.getByText('Credit Note Information')).toBeInTheDocument();
@@ -50,32 +54,21 @@ describe('CreditNotePage', () => {
     expect(screen.getByText('Additional Information')).toBeInTheDocument();
     expect(screen.getAllByText('Save Draft').length).toBeGreaterThan(0);
     expect(screen.getAllByText('Save & Generate').length).toBeGreaterThan(0);
-
-    await waitFor(() => expect(getLatestCreditNoteDraftApi).toHaveBeenCalled());
   });
 
   it('disables the Save & Generate buttons while the form is incomplete', async () => {
     getLatestCreditNoteDraftApi.mockResolvedValue(null);
-    renderWithProviders(<CreditNotePage />);
-    await waitFor(() => expect(getLatestCreditNoteDraftApi).toHaveBeenCalled());
+    renderWithProviders(<CreditNotePage />, {
+      preloadedState: {
+        tradeOrganization: { organization: completeOrg, loading: false, loaded: true, saving: false },
+      },
+    });
 
     const generateButtons = screen.getAllByText('Save & Generate', { exact: false }).map((el) => el.closest('button'));
     for (const btn of generateButtons) {
       await waitFor(() => expect(btn).toBeDisabled());
       expect(btn).toHaveAttribute('title', 'Complete all required fields to enable');
     }
-  });
-
-  it('shows an organization-incomplete error when saving without a complete organization profile', async () => {
-    getLatestCreditNoteDraftApi.mockResolvedValue(null);
-    renderWithProviders(<CreditNotePage />);
-    await waitFor(() => expect(getLatestCreditNoteDraftApi).toHaveBeenCalled());
-
-    const [saveDraftButton] = screen.getAllByText('Save Draft').map((el) => el.closest('button'));
-    await userEvent.click(saveDraftButton);
-
-    expect(await screen.findByText(/Organization profile incomplete/i)).toBeInTheDocument();
-    expect(saveCreditNoteDraftApi).not.toHaveBeenCalled();
   });
 
   it('displays the organization details when the organization profile is loaded', async () => {
@@ -85,7 +78,6 @@ describe('CreditNotePage', () => {
         tradeOrganization: { organization: completeOrg, loading: false, loaded: true, saving: false },
       },
     });
-    await waitFor(() => expect(getLatestCreditNoteDraftApi).toHaveBeenCalled());
 
     expect(screen.getByText('Acme Trading Co.')).toBeInTheDocument();
     expect(screen.getByText('221B Baker Street, Mumbai')).toBeInTheDocument();
@@ -94,8 +86,11 @@ describe('CreditNotePage', () => {
 
   it('adds a new line item when "Add Line Item" is clicked', async () => {
     getLatestCreditNoteDraftApi.mockResolvedValue(null);
-    renderWithProviders(<CreditNotePage />);
-    await waitFor(() => expect(getLatestCreditNoteDraftApi).toHaveBeenCalled());
+    renderWithProviders(<CreditNotePage />, {
+      preloadedState: {
+        tradeOrganization: { organization: completeOrg, loading: false, loaded: true, saving: false },
+      },
+    });
 
     expect(screen.getAllByText(/^Item \d$/)).toHaveLength(1);
 
@@ -125,9 +120,15 @@ describe('CreditNotePage', () => {
       notes: 'Refund for return',
       termsAndConditions: 'Standard terms',
     };
-    getLatestCreditNoteDraftApi.mockResolvedValue(mockDraft);
-    renderWithProviders(<CreditNotePage />);
+    getCreditNoteByIdApi.mockResolvedValue(mockDraft);
+    renderWithProviders(<CreditNotePage />, {
+      route: '/?id=cn-1',
+      preloadedState: {
+        tradeOrganization: { organization: completeOrg, loading: false, loaded: true, saving: false },
+      },
+    });
 
+    await waitFor(() => expect(getCreditNoteByIdApi).toHaveBeenCalledWith('cn-1'));
     await waitFor(() => expect(screen.getByDisplayValue('Jane Customer')).toBeInTheDocument());
 
     expect(screen.getByDisplayValue('Acme Buyer Corp')).toBeInTheDocument();

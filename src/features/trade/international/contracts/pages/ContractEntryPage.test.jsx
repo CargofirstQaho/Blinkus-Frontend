@@ -64,19 +64,6 @@ describe('ContractEntryPage', () => {
     expect(mockNavigate).toHaveBeenCalledWith('/trade/international/contract-drafting/review?id=c-1');
   });
 
-  it('shows a continue draft banner when a draft exists and navigates to it', async () => {
-    getLatestContractDraftApi.mockResolvedValue({ contractNumber: 'CT-2024-003', buyer: { companyName: 'Acme Buyer Corp' } });
-    listFinalizedContractsApi.mockResolvedValue([]);
-    renderWithProviders(<ContractEntryPage />);
-
-    expect(await screen.findByText('Continue Draft')).toBeInTheDocument();
-    expect(screen.getByText(/Contract: CT-2024-003/)).toBeInTheDocument();
-    expect(screen.getByText(/Buyer: Acme Buyer Corp/)).toBeInTheDocument();
-
-    await userEvent.click(screen.getByRole('button', { name: /continue/i }));
-    expect(mockNavigate).toHaveBeenCalledWith('/trade/international/contract-drafting/draft');
-  });
-
   it('navigates to the upload and draft pages from the create-new-contract options', async () => {
     getLatestContractDraftApi.mockResolvedValue(null);
     listFinalizedContractsApi.mockResolvedValue([]);

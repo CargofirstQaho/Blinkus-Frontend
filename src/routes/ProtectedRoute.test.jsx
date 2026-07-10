@@ -23,7 +23,12 @@ function renderProtectedRoute(preloadedState) {
 
 describe('ProtectedRoute', () => {
   it('renders protected content when user is authenticated', () => {
-    renderProtectedRoute(authenticatedState);
+    renderProtectedRoute({
+      auth: {
+        ...authenticatedState.auth,
+        user: { ...authenticatedState.auth.user, termsAcceptance: { accepted: true } },
+      },
+    });
     expect(screen.getByText('Protected Dashboard Content')).toBeInTheDocument();
   });
 

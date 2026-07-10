@@ -53,7 +53,7 @@ describe('useOrganization', () => {
     const store = createTestStore();
     const { result } = renderHook(() => useOrganization(), { wrapper: wrapperFor(store) });
 
-    await waitFor(() => expect(toast.error).toHaveBeenCalledWith('Network error'));
+    await waitFor(() => expect(toast.error).toHaveBeenCalledWith('Network error', { toastId: 'org-load-error' }));
     await waitFor(() => expect(result.current.loaded).toBe(true));
   });
 

@@ -33,6 +33,6 @@ describe('LockedFeatureScreen', () => {
 
     await userEvent.click(screen.getByRole('button', { name: /view subscription plans/i }));
 
-    expect(mockNavigate).toHaveBeenCalledWith('/upgrade');
+    expect(mockNavigate).toHaveBeenCalledWith('/trade/upgrade');
   });
 });

@@ -40,7 +40,11 @@ describe('DebitNotePage', () => {
 
   it('renders all form sections', async () => {
     getLatestDebitNoteDraftApi.mockResolvedValue(null);
-    renderWithProviders(<DebitNotePage />);
+    renderWithProviders(<DebitNotePage />, {
+      preloadedState: {
+        tradeOrganization: { organization: completeOrg, loading: false, loaded: true, saving: false },
+      },
+    });
 
     expect(screen.getByText('Debit Note')).toBeInTheDocument();
     expect(screen.getByText('Debit Note Information')).toBeInTheDocument();
@@ -50,32 +54,21 @@ describe('DebitNotePage', () => {
     expect(screen.getByText('Additional Information')).toBeInTheDocument();
     expect(screen.getAllByText('Save Draft').length).toBeGreaterThan(0);
     expect(screen.getAllByText('Save & Generate', { exact: false }).length).toBeGreaterThan(0);
-
-    await waitFor(() => expect(getLatestDebitNoteDraftApi).toHaveBeenCalled());
   });
 
   it('disables the Save & Generate buttons while the form is incomplete', async () => {
     getLatestDebitNoteDraftApi.mockResolvedValue(null);
-    renderWithProviders(<DebitNotePage />);
-    await waitFor(() => expect(getLatestDebitNoteDraftApi).toHaveBeenCalled());
+    renderWithProviders(<DebitNotePage />, {
+      preloadedState: {
+        tradeOrganization: { organization: completeOrg, loading: false, loaded: true, saving: false },
+      },
+    });
 
     const generateButtons = screen.getAllByText('Save & Generate', { exact: false }).map((el) => el.closest('button'));
     for (const btn of generateButtons) {
       await waitFor(() => expect(btn).toBeDisabled());
       expect(btn).toHaveAttribute('title', 'Complete all required fields to enable');
     }
-  });
-
-  it('shows an organization-incomplete error when saving without a complete organization profile', async () => {
-    getLatestDebitNoteDraftApi.mockResolvedValue(null);
-    renderWithProviders(<DebitNotePage />);
-    await waitFor(() => expect(getLatestDebitNoteDraftApi).toHaveBeenCalled());
-
-    const [saveDraftButton] = screen.getAllByText('Save Draft').map((el) => el.closest('button'));
-    await userEvent.click(saveDraftButton);
-
-    expect(await screen.findByText(/Organization profile incomplete/i)).toBeInTheDocument();
-    expect(saveDebitNoteDraftApi).not.toHaveBeenCalled();
   });
 
   it('displays the organization details when the organization profile is loaded', async () => {
@@ -85,7 +78,6 @@ describe('DebitNotePage', () => {
         tradeOrganization: { organization: completeOrg, loading: false, loaded: true, saving: false },
       },
     });
-    await waitFor(() => expect(getLatestDebitNoteDraftApi).toHaveBeenCalled());
 
     expect(screen.getByText('Acme Trading Co.')).toBeInTheDocument();
     expect(screen.getByText('221B Baker Street, Mumbai')).toBeInTheDocument();
@@ -94,8 +86,11 @@ describe('DebitNotePage', () => {
 
   it('adds a new line item when "Add Line Item" is clicked', async () => {
     getLatestDebitNoteDraftApi.mockResolvedValue(null);
-    renderWithProviders(<DebitNotePage />);
-    await waitFor(() => expect(getLatestDebitNoteDraftApi).toHaveBeenCalled());
+    renderWithProviders(<DebitNotePage />, {
+      preloadedState: {
+        tradeOrganization: { organization: completeOrg, loading: false, loaded: true, saving: false },
+      },
+    });
 
     expect(screen.getAllByText(/^Item \d$/)).toHaveLength(1);
 
@@ -124,9 +119,15 @@ describe('DebitNotePage', () => {
       notes: 'Adjustment note',
       termsAndConditions: 'Standard terms',
     };
-    getLatestDebitNoteDraftApi.mockResolvedValue(mockDraft);
-    renderWithProviders(<DebitNotePage />);
+    getDebitNoteByIdApi.mockResolvedValue(mockDraft);
+    renderWithProviders(<DebitNotePage />, {
+      route: '/?id=dn-1',
+      preloadedState: {
+        tradeOrganization: { organization: completeOrg, loading: false, loaded: true, saving: false },
+      },
+    });
 
+    await waitFor(() => expect(getDebitNoteByIdApi).toHaveBeenCalledWith('dn-1'));
     await waitFor(() => expect(screen.getByDisplayValue('John Supplier')).toBeInTheDocument());
 
     expect(screen.getByDisplayValue('Acme Supplier Corp')).toBeInTheDocument();

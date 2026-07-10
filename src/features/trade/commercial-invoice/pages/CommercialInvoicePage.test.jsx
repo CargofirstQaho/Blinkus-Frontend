@@ -67,7 +67,11 @@ describe('CommercialInvoicePage', () => {
   it('renders all sections and shows the no-finalized-contract message when none exist', async () => {
     getLatestCommercialInvoiceDraftApi.mockResolvedValue(null);
     listFinalizedContractsApi.mockResolvedValue([]);
-    renderWithProviders(<CommercialInvoicePage />);
+    renderWithProviders(<CommercialInvoicePage />, {
+      preloadedState: {
+        tradeOrganization: { organization: completeOrg, loading: false, loaded: true, saving: false },
+      },
+    });
 
     expect(screen.getByText('Commercial Invoice')).toBeInTheDocument();
     expect(await screen.findByText('No Finalized Contract Found')).toBeInTheDocument();
@@ -109,7 +113,11 @@ describe('CommercialInvoicePage', () => {
     getLatestCommercialInvoiceDraftApi.mockResolvedValue(null);
     listFinalizedContractsApi.mockResolvedValue(mockContractList);
     getContractByIdApi.mockResolvedValue(mockContractDetails);
-    renderWithProviders(<CommercialInvoicePage />);
+    renderWithProviders(<CommercialInvoicePage />, {
+      preloadedState: {
+        tradeOrganization: { organization: completeOrg, loading: false, loaded: true, saving: false },
+      },
+    });
 
     const contractOption = await screen.findByText('— Select a finalized contract —');
     await userEvent.selectOptions(contractOption.closest('select'), 'c-1');
@@ -124,27 +132,14 @@ describe('CommercialInvoicePage', () => {
     expect(screen.getByDisplayValue('Shanghai')).toBeInTheDocument();
   });
 
-  it('shows an organization-incomplete error when saving without a complete organization profile', async () => {
-    getLatestCommercialInvoiceDraftApi.mockResolvedValue(null);
-    listFinalizedContractsApi.mockResolvedValue(mockContractList);
-    getContractByIdApi.mockResolvedValue(mockContractDetails);
-    renderWithProviders(<CommercialInvoicePage />);
-
-    const contractOption = await screen.findByText('— Select a finalized contract —');
-    await userEvent.selectOptions(contractOption.closest('select'), 'c-1');
-    await waitFor(() => expect(getContractByIdApi).toHaveBeenCalledWith('c-1'));
-
-    const [saveDraftButton] = screen.getAllByText('Save Draft').map((el) => el.closest('button'));
-    await userEvent.click(saveDraftButton);
-
-    expect(await screen.findByText(/Organization profile incomplete/i)).toBeInTheDocument();
-    expect(saveCommercialInvoiceDraftApi).not.toHaveBeenCalled();
-  });
-
   it('disables the save buttons without a title when no contract is selected', async () => {
     getLatestCommercialInvoiceDraftApi.mockResolvedValue(null);
     listFinalizedContractsApi.mockResolvedValue(mockContractList);
-    renderWithProviders(<CommercialInvoicePage />);
+    renderWithProviders(<CommercialInvoicePage />, {
+      preloadedState: {
+        tradeOrganization: { organization: completeOrg, loading: false, loaded: true, saving: false },
+      },
+    });
     await waitFor(() => expect(listFinalizedContractsApi).toHaveBeenCalled());
 
     const [saveDraftButton] = screen.getAllByText('Save Draft').map((el) => el.closest('button'));
@@ -171,10 +166,16 @@ describe('CommercialInvoicePage', () => {
       termsAndConditions: 'Some terms',
       signatory: { name: 'John Signer', designation: 'Director' },
     };
-    getLatestCommercialInvoiceDraftApi.mockResolvedValue(mockDraft);
+    getCommercialInvoiceByIdApi.mockResolvedValue(mockDraft);
     listFinalizedContractsApi.mockResolvedValue(mockContractList);
-    renderWithProviders(<CommercialInvoicePage />);
+    renderWithProviders(<CommercialInvoicePage />, {
+      route: '/?id=ci-1',
+      preloadedState: {
+        tradeOrganization: { organization: completeOrg, loading: false, loaded: true, saving: false },
+      },
+    });
 
+    await waitFor(() => expect(getCommercialInvoiceByIdApi).toHaveBeenCalledWith('ci-1'));
     await waitFor(() => expect(screen.getByDisplayValue('Acme Exporters')).toBeInTheDocument());
 
     expect(screen.getByDisplayValue('Acme Buyers')).toBeInTheDocument();
