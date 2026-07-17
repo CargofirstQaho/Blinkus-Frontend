@@ -24,7 +24,7 @@ export const FREE_PLAN_FEATURES = [
   { label: 'No Proforma Invoice',                  included: false },
   { label: 'No Packing List',                      included: false },
   { label: 'No Commercial Invoice',                included: false },
-  { label: 'Supports in Global Partnerships',                included: false },
+  { label: 'No Supports in Global Partnerships',                included: false },
   { label: 'No Supports in Trade Finance and Insurance',                included: false },
 ];
 
