@@ -9,7 +9,6 @@ import { selectIsAuthenticated } from '../redux/slices/authSlice';
 
 const FREE_FEATURES = [
   { label: 'Limited AI Chat Usage', included: true, highlight: Bot },
-  { label: 'No ERP Access', included: false },
   { label: 'No Buyer/Seller Credibility Checking', included: false },
   { label: 'No Contract Drafting', included: false },
   { label: 'No Order Management', included: false },
@@ -19,12 +18,13 @@ const FREE_FEATURES = [
   { label: 'No Proforma Invoice', included: false },
   { label: 'No Packing List', included: false },
   { label: 'No Commercial Invoice', included: false },
+  { label: 'No Supports in Global Partnerships', included: false },
+  { label: 'No Supports in Trade Finance and Insurance', included: false },
 ];
 
 const PREMIUM_FEATURES = [
   { label: 'Unlimited AI Chat', highlight: Bot },
   { label: 'Buyer/Seller Credibility Check', highlight: ShieldCheck },
-  { label: 'ERP Access', highlight: LayoutDashboard },
   { label: 'Purchase Orders', highlight: ClipboardList },
   { label: 'Credit Notes' },
   { label: 'Debit Notes' },
@@ -32,6 +32,8 @@ const PREMIUM_FEATURES = [
   { label: 'Proforma Invoice' },
   { label: 'Packing List' },
   { label: 'Commercial Invoice' },
+  { label: 'Supports in Global Partnerships' },
+  { label: 'Supports in Trade Finance and Insurance' },
 ].map((feature) => ({ ...feature, included: true }));
 
 const BILLING_OPTIONS = [

@@ -46,7 +46,7 @@ describe('SubscriptionStatusCard', () => {
 
     it('shows subscribe prompt when not active', () => {
       renderWithProviders(<SubscriptionStatusCard trade={noActiveTrade} />);
-      expect(screen.getByText('Subscribe to unlock full ERP access')).toBeInTheDocument();
+      expect(screen.getByText('Subscribe to unlock full Trade access')).toBeInTheDocument();
     });
 
     it('shows Upgrade button when not active', () => {
@@ -98,7 +98,7 @@ describe('SubscriptionStatusCard', () => {
 
     it('does not show subscribe prompt when active', () => {
       renderWithProviders(<SubscriptionStatusCard trade={activeTrade} />);
-      expect(screen.queryByText('Subscribe to unlock full ERP access')).not.toBeInTheDocument();
+      expect(screen.queryByText('Subscribe to unlock full Trade access')).not.toBeInTheDocument();
     });
   });
 

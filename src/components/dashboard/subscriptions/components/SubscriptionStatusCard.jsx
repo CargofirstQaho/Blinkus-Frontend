@@ -43,7 +43,7 @@ export default function SubscriptionStatusCard({ trade, compact = false }) {
               </p>
             ) : (
               <p className="text-xs mt-0.5" style={{ color: '#64748b' }}>
-                Subscribe to unlock full ERP access
+                Subscribe to unlock full Trade access
               </p>
             )}
           </div>

@@ -2,7 +2,6 @@ export const PLAN_FEATURES = [
   'Unlimited AI Chat',
   'Buyer Credibility Check',
   'Seller Credibility Check',
-  'ERP Access',
   'Purchase Orders',
   'Credit Notes',
   'Debit Notes',
@@ -10,11 +9,12 @@ export const PLAN_FEATURES = [
   'Proforma Invoice',
   'Packing List',
   'Commercial Invoice',
+  'Supports in Global Partnerships',
+  'Supports in Trade Finance and Insurance'
 ];
 
 export const FREE_PLAN_FEATURES = [
   { label: 'Limited AI Chat Usage',                included: true  },
-  { label: 'No ERP Access',                        included: false },
   { label: 'No Buyer/Seller Credibility Checking', included: false },
   { label: 'No Contract Drafting',                 included: false },
   { label: 'No Order Management',                  included: false },
@@ -24,11 +24,13 @@ export const FREE_PLAN_FEATURES = [
   { label: 'No Proforma Invoice',                  included: false },
   { label: 'No Packing List',                      included: false },
   { label: 'No Commercial Invoice',                included: false },
+  { label: 'Supports in Global Partnerships',                included: false },
+  { label: 'No Supports in Trade Finance and Insurance',                included: false },
 ];
 
 export const FREE_LIMITATIONS = [
   'Limited AI Chat Questions Per Day',
-  'No ERP Access',
+  'No Trade Access',
   'No Credibility Checks',
   'No Trade Documents',
   'No Contract Drafting',
