@@ -19,9 +19,12 @@ import {
   updateConvLastMessage,
 } from '../redux/slices/chatHistorySlice';
 import { apiFetch, SessionExpiredError } from '../lib/apiFetch';
+import { useAiUsageLimit } from '../hooks/useAiUsageLimit';
 import { cn } from '../lib/utils';
 import Spinner from '../components/ui/Spinner';
 import MessageContent from '../components/chat/MessageContent';
+import AiUsageLimitBanner from '../components/chat/AiUsageLimitBanner';
+import FreePlanUsageBanner from '../components/chat/FreePlanUsageBanner';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -113,6 +116,8 @@ export default function Chat() {
   const messages = useSelector(selectMessages);
   const activeId = useSelector(selectActiveConvId);
 
+  const { reportUsageResponse } = useAiUsageLimit();
+
   const [input, setInput]               = useState('');
   const [isSending, setIsSending]       = useState(false);
   const [isLoadingMsgs, setLoadingMsgs] = useState(false);
@@ -191,6 +196,12 @@ export default function Chat() {
         body:    JSON.stringify({ content: text }),
       });
       const sendData = await sendRes.json().catch(() => ({}));
+
+      if (reportUsageResponse(sendRes, sendData)) {
+        dispatch(removeLastMessage());
+        return;
+      }
+
       if (!sendRes.ok) throw new Error(sendData.message || 'Failed to send message');
 
       dispatch(appendMessage(sendData.data.message));
@@ -212,7 +223,7 @@ export default function Chat() {
       setIsSending(false);
       inputRef.current?.focus();
     }
-  }, [input, isSending, isNew, activeId, chatId, dispatch, navigate]);
+  }, [input, isSending, isNew, activeId, chatId, dispatch, navigate, reportUsageResponse]);
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handleSend(); }
@@ -273,6 +284,8 @@ export default function Chat() {
 
       {/* Input bar */}
       <div className="px-3 py-3 sm:px-4 sm:py-4 bg-white border-t border-black/5 shrink-0">
+        <FreePlanUsageBanner />
+        <AiUsageLimitBanner />
         <div className="flex items-end gap-2 sm:gap-3 max-w-4xl mx-auto">
           <textarea
             ref={inputRef}
@@ -281,8 +294,8 @@ export default function Chat() {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             disabled={isSending}
-            placeholder="Ask about prices,HS codes,trade regulations..."
-            className="flex-1 resize-none px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl border border-black/10 bg-black/3 outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all text-sm disabled:opacity-60 overflow-hidden [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+            placeholder="Ask about prices, buyers/sellers, trade related questions."
+            className="flex-1 resize-none px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl border border-black/10 outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all text-sm disabled:opacity-60 overflow-hidden [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
             onInput={(e) => {
               e.target.style.height = 'auto';
               e.target.style.height = Math.min(e.target.scrollHeight, 180) + 'px';
@@ -296,14 +309,14 @@ export default function Chat() {
               'w-10 h-10 sm:w-11 sm:h-11 rounded-xl flex items-center justify-center shrink-0 transition-all',
               input.trim() && !isSending
                 ? 'bg-accent text-white hover:bg-accent/90 shadow-md shadow-accent/25'
-                : 'bg-black/5 text-black/30 cursor-not-allowed'
+                : 'bg-black/3 text-black/30 cursor-not-allowed'
             )}
           >
             {isSending ? <Loader2 size={16} className="animate-spin sm:w-[18px] sm:h-[18px]" /> : <Send size={16} className="sm:w-[18px] sm:h-[18px]" />}
           </button>
         </div>
         <p className="text-center text-[10px] text-black/20 mt-2 max-w-4xl mx-auto">
-          Blinkus Intelligence may produce inaccurate trade data. Verify with official sources.
+          Blinkus is AI and can make mistakes.
         </p>
       </div>
     </div>

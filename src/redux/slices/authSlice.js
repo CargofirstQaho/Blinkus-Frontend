@@ -15,6 +15,8 @@ const authSlice = createSlice({
     usage: {
       aiQuestionsToday: 0,
       aiQuestionsLimit: 20,
+      periodLabel:      null,
+      resetsAt:         null,
     },
   },
   reducers: {
@@ -41,7 +43,7 @@ const authSlice = createSlice({
       state.isPremium          = false;
       state.permissions        = [];
       state.subscriptionEndsAt = null;
-      state.usage              = { aiQuestionsToday: 0, aiQuestionsLimit: 20 };
+      state.usage              = { aiQuestionsToday: 0, aiQuestionsLimit: 20, periodLabel: null, resetsAt: null };
     },
 
     setAuthLoading(state, { payload }) {

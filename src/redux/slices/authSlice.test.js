@@ -25,7 +25,7 @@ const initialState = {
   isPremium: false,
   permissions: [],
   subscriptionEndsAt: null,
-  usage: { aiQuestionsToday: 0, aiQuestionsLimit: 20 },
+  usage: { aiQuestionsToday: 0, aiQuestionsLimit: 20, periodLabel: null, resetsAt: null },
 };
 
 const mockUser = {
