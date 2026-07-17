@@ -2,6 +2,7 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import authReducer         from './slices/authSlice';
 import chatReducer         from './slices/chatSlice';
 import chatHistoryReducer  from './slices/chatHistorySlice';
+import aiUsageReducer      from './slices/aiUsageSlice';
 import dashboardReducer    from './slices/dashboardSlice';
 import subscriptionReducer from './slices/subscriptionSlice';
 import pricingReducer      from './slices/pricingSlice';
@@ -20,6 +21,7 @@ const appReducer = combineReducers({
   auth:              authReducer,
   chat:              chatReducer,
   chatHistory:       chatHistoryReducer,
+  aiUsage:           aiUsageReducer,
   dashboard:         dashboardReducer,
   subscription:      subscriptionReducer,
   pricing:           pricingReducer,

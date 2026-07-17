@@ -1,9 +1,4 @@
-// Renders AI message content with smart layout detection.
-// Detects numbered-list/directory responses and renders them as visual cards.
-// Falls back to plain whitespace-pre-wrap text for conversational responses.
 
-// Parses a response into numbered entries if the content is a structured list.
-// Returns an array of { num, title, details[] } or null if not a list.
 function parseListEntries(text) {
   const entryRe = /^(\d{1,3})[.)]\s+(.+)/;
   const lines   = text.split('\n');
@@ -23,7 +18,6 @@ function parseListEntries(text) {
   }
   if (current) entries.push(current);
 
-  // Only activate card rendering when there are 3 or more numbered entries
   return entries.length >= 3 ? entries : null;
 }
 
