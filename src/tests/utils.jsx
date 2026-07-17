@@ -5,6 +5,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import authReducer from '../redux/slices/authSlice';
 import chatReducer from '../redux/slices/chatSlice';
 import chatHistoryReducer from '../redux/slices/chatHistorySlice';
+import aiUsageReducer from '../redux/slices/aiUsageSlice';
 import dashboardReducer from '../redux/slices/dashboardSlice';
 import subscriptionReducer from '../redux/slices/subscriptionSlice';
 import pricingReducer from '../redux/slices/pricingSlice';
@@ -24,6 +25,7 @@ export function createTestStore(preloadedState = {}) {
       auth: authReducer,
       chat: chatReducer,
       chatHistory: chatHistoryReducer,
+      aiUsage: aiUsageReducer,
       dashboard: dashboardReducer,
       subscription: subscriptionReducer,
       pricing: pricingReducer,

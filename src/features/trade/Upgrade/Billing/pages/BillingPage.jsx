@@ -14,6 +14,7 @@ import { apiFetch } from '@/src/lib/apiFetch.js';
 import { setUser } from '@/src/redux/slices/authSlice.js';
 import { setErpSubscriptionState } from '@/src/redux/slices/subscriptionSlice.js';
 import { setEntitlements } from '@/src/redux/slices/entitlementSlice.js';
+import { clearAiUsageLimit } from '@/src/redux/slices/aiUsageSlice.js';
 import { fetchErpSubscriptionStatus } from '@/src/services/erpSubscriptionApi.js';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
@@ -68,6 +69,8 @@ export default function BillingPage() {
   };
 
   const refreshStateAfterPayment = async () => {
+    dispatch(clearAiUsageLimit());
+
     try {
       const meRes = await apiFetch(`${BACKEND_URL}/api/auth/me`);
       if (meRes.ok) {
