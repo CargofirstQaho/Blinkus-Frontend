@@ -138,7 +138,7 @@ export default function VerifyOtp() {
           <div className="w-14 h-14 rounded-2xl bg-accent/10 text-accent flex items-center justify-center mb-5 rotate-6">
             <MailCheck size={28} />
           </div>
-          <h1 className="text-2xl sm:text-3xl font-display font-bold mb-2">Check your email</h1>
+          <h1 className="text-2xl sm:text-3xl font-display font-bold mb-2">Check your email inbox and spam folder</h1>
           <p className="text-black/50 text-sm sm:text-base leading-relaxed max-w-xs">
             We sent a 6-digit code to{' '}
             <span className="font-semibold text-black/70">{email}</span>
