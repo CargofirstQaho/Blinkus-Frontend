@@ -1,7 +1,7 @@
 import { motion } from 'motion/react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Sparkles, ArrowRight, Globe, TrendingUp, Shield, Cpu } from 'lucide-react';
+import { Sparkles, ArrowRight, Globe, TrendingUp, Shield, Cpu, Rocket, Zap, Brain, Layers } from 'lucide-react';
 import { selectUser } from '../../../redux/slices/authSlice';
 
 const METRICS = [
@@ -36,6 +36,72 @@ const EDGE_PATHS = [
   'M 72,18 Q 137,5 202,24',
   'M 18,40 Q 65,12 112,34',
 ];
+
+const AGENT_V2_HIGHLIGHTS = [
+  { icon: Brain, label: 'Deeper trade reasoning' },
+  { icon: Zap,   label: 'Faster, real-time answers' },
+  { icon: Layers, label: 'Unified multi-module context' },
+];
+
+function AgentV2ComingSoon({ className = '' }) {
+  return (
+    <div
+      className={`relative overflow-hidden rounded-xl px-4 py-4 sm:py-5 ${className}`}
+      style={{
+        background: 'linear-gradient(135deg, rgba(37,99,235,0.09) 0%, rgba(99,102,241,0.07) 100%)',
+        border: '1px solid rgba(37,99,235,0.16)',
+      }}
+    >
+      <div
+        className="absolute -top-10 -right-10 w-28 h-28 rounded-full pointer-events-none"
+        style={{ background: 'radial-gradient(circle, rgba(37,99,235,0.18) 0%, transparent 70%)' }}
+      />
+
+      <div className="relative flex items-center gap-2 mb-3">
+        <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse shrink-0" />
+        <span className="text-[15px] font-bold uppercase tracking-[0.14em]" style={{ color: '#d97706' }}>
+          Coming Soon
+        </span>
+      </div>
+
+      <div className="relative flex items-center gap-2.5 mb-2.5">
+        <div
+          className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
+          style={{
+            background: 'linear-gradient(135deg, #2563eb 0%, #3b82f6 100%)',
+            boxShadow: '0 2px 10px rgba(37,99,235,0.35)',
+          }}
+        >
+          <Rocket size={15} className="text-white" />
+        </div>
+        <div className="min-w-0">
+          <p className="text-xs font-bold leading-tight" style={{ color: '#0f172a' }}>
+            Blinkus Chat V2
+          </p>
+          <p className="text-[10px] mt-0.5 leading-snug" style={{ color: '#64748b' }}>
+            The next-gen trade intelligence engine
+          </p>
+        </div>
+      </div>
+
+      <p className="relative text-[11px] leading-relaxed mb-3" style={{ color: '#475569' }}>
+        A major upgrade to the Blinkus AI core. Built to reason across markets, contracts,
+        and compliance data together, with sharper accuracy and quicker turnaround.
+      </p>
+
+      <div className="relative space-y-1.5 pt-3" style={{ borderTop: '1px solid rgba(37,99,235,0.12)' }}>
+        {AGENT_V2_HIGHLIGHTS.map(({ icon: Icon, label }) => (
+          <div key={label} className="flex items-center gap-2">
+            <Icon size={11} style={{ color: '#3b82f6' }} className="shrink-0" />
+            <span className="text-[10px] font-medium" style={{ color: '#64748b' }}>
+              {label}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function HeroBanner() {
   const navigate  = useNavigate();
@@ -199,6 +265,15 @@ export default function HeroBanner() {
             >
               Powered by Blinkus AI
             </span>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.35 }}
+            className="mt-5 lg:hidden"
+          >
+            <AgentV2ComingSoon />
           </motion.div>
         </div>
 
@@ -387,6 +462,8 @@ export default function HeroBanner() {
               </span>
             </div>
           </div>
+
+          <AgentV2ComingSoon />
         </motion.div>
 
       </div>
