@@ -25,6 +25,7 @@ import Spinner from '../components/ui/Spinner';
 import MessageContent from '../components/chat/MessageContent';
 import AiUsageLimitBanner from '../components/chat/AiUsageLimitBanner';
 import FreePlanUsageBanner from '../components/chat/FreePlanUsageBanner';
+import ModelSelectDropdown from '../components/chat/ModelSelectDropdown';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
@@ -287,22 +288,26 @@ export default function Chat() {
         <FreePlanUsageBanner />
         <AiUsageLimitBanner />
         <div className="flex items-end gap-2 sm:gap-3 max-w-4xl mx-auto">
-          <textarea
-            ref={inputRef}
-            rows={1}
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={handleKeyDown}
-            disabled={isSending}
-            placeholder="Ask about prices, buyers/sellers, trade related questions."
-            className="flex-1 resize-none px-3.5 py-2.5 sm:px-4 sm:py-3 rounded-xl border border-black/10 outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all text-sm disabled:opacity-60 overflow-hidden [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-            onInput={(e) => {
-              e.target.style.height = 'auto';
-              e.target.style.height = Math.min(e.target.scrollHeight, 180) + 'px';
-            }}
-          />
+          <div className="flex-1 flex items-end gap-2 rounded-xl border border-black/10 bg-white focus-within:border-accent focus-within:ring-2 focus-within:ring-accent/20 transition-all px-3.5 py-2.5 sm:px-4 sm:py-3">
+            <textarea
+              ref={inputRef}
+              rows={1}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={handleKeyDown}
+              disabled={isSending}
+              placeholder="Ask about prices, buyers/sellers, trade related questions."
+              className="flex-1 resize-none bg-transparent outline-none text-sm disabled:opacity-60 overflow-hidden [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+              onInput={(e) => {
+                e.target.style.height = 'auto';
+                e.target.style.height = Math.min(e.target.scrollHeight, 180) + 'px';
+              }}
+            />
+            <ModelSelectDropdown />
+          </div>
           <button
             type="button"
+            aria-label="Send message"
             onClick={handleSend}
             disabled={!input.trim() || isSending}
             className={cn(

@@ -41,11 +41,8 @@ function renderChat({ route = '/chat/new', preloadedState = {} } = {}) {
   };
 }
 
-// The send button has no accessible text (icon-only). It sits immediately after the
-// textarea in the DOM, so we find it via sibling traversal to avoid ambiguity with
-// the suggestion prompt buttons that also render as <button> in the empty-chat state.
 function getSendButton() {
-  return screen.getByPlaceholderText(/ask about prices/i).nextElementSibling;
+  return screen.getByRole('button', { name: /send message/i });
 }
 
 describe('Chat Page', () => {

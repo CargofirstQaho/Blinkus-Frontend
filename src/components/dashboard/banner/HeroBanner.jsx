@@ -463,7 +463,6 @@ export default function HeroBanner() {
             </div>
           </div>
 
-          <AgentV2ComingSoon />
         </motion.div>
 
       </div>
